@@ -6,7 +6,7 @@ import Prelude
     ( Show(..)
     , Eq(..)
     , Ord(..)
-    , Num(..)
+    , Num(.. )
     , Integral
     , Bool(..)
     , not
@@ -18,7 +18,7 @@ import Prelude
     , undefined
     , error
     , otherwise
-    )
+   ) 
 
 data Nat = O | S Nat
 
@@ -102,7 +102,9 @@ instance Num Nat where
 
 -- quotient
 (</>) :: Nat -> Nat -> Nat
-n </> m = undefined 
+n </> m = if n >= m
+          then S ((n - m) </> m) 
+          else O
 
 -- remainder
 (<%>) :: Nat -> Nat -> Nat
