@@ -100,20 +100,22 @@ instance Num Nat where
         | x == 0    = O
         | otherwise = fromInteger (x - 1)
 
--- quotient
 (</>) :: Nat -> Nat -> Nat
 n </> m = if n >= m
-          then S ((n - m) </> m) 
+          then S (n' </> m) 
           else O
+  where n' = n <-> m
 
--- remainder
 (<%>) :: Nat -> Nat -> Nat
-(<%>) = undefined
+n <%> m = if n >= m 
+          then n' <%> m 
+          else n
+  where n' = n <-> m
 
--- divides
 (<|>) :: Nat -> Nat -> Bool
-(<|>) = undefined
-
+n <|> m = case n <%> m of 
+              O -> True 
+              _ -> False
 divides = (<|>)
 
 absDiff :: Nat -> Nat -> Nat
@@ -125,7 +127,6 @@ fact :: Nat -> Nat
 fact O  =  S O
 fact (S n) = n * fact n
 
--- signum of a number (-1, 0, or 1)
 sg :: Nat -> Nat
 sg O = O
 sg _ = 1
@@ -133,12 +134,6 @@ sg _ = 1
 -- lo b a is the floor of the logarithm base b of a
 lo :: Nat -> Nat -> Nat
 lo = undefined
-
-
---
--- For the following functions we need Num(..).
--- Do NOT use the following functions in the definitions above!
---
 
 toNat :: Integral a => a -> Nat
 toNat x = if x <= 0 
@@ -148,4 +143,52 @@ toNat x = if x <= 0
 fromNat :: Integral a => Nat -> a
 fromNat = undefined
 
+
+-- abbrevs (syntactic sugar) to the 50 first Nat`s :PPP
+
+o    = O
+so   = S o
+sso  = S so
+ssso = S sso
+sssso = S ssso
+ssssso = S sssso
+sssssso = S ssssso
+ssssssso = S sssssso
+sssssssso = S ssssssso
+ssssssssso = S sssssssso
+sssssssssso = S ssssssssso
+ssssssssssso = S sssssssssso
+sssssssssssso = S ssssssssssso
+ssssssssssssso = S sssssssssssso
+sssssssssssssso = S ssssssssssssso
+ssssssssssssssso = S sssssssssssssso
+sssssssssssssssso = S ssssssssssssssso
+ssssssssssssssssso = S sssssssssssssssso
+sssssssssssssssssso = S ssssssssssssssssso
+ssssssssssssssssssso = S sssssssssssssssssso
+sssssssssssssssssssso = S ssssssssssssssssssso
+ssssssssssssssssssssso = S sssssssssssssssssssso
+sssssssssssssssssssssso = S ssssssssssssssssssssso
+ssssssssssssssssssssssso = S sssssssssssssssssssssso
+sssssssssssssssssssssssso = S ssssssssssssssssssssssso
+ssssssssssssssssssssssssso = S sssssssssssssssssssssssso
+sssssssssssssssssssssssssso = S ssssssssssssssssssssssssso
+ssssssssssssssssssssssssssso = S sssssssssssssssssssssssssso
+sssssssssssssssssssssssssssso = S sssssssssssssssssssssssssssso
+ssssssssssssssssssssssssssssso = S ssssssssssssssssssssssssssssso
+sssssssssssssssssssssssssssssso = S sssssssssssssssssssssssssssssso
+ssssssssssssssssssssssssssssssso = S ssssssssssssssssssssssssssssssso
+sssssssssssssssssssssssssssssssso = S sssssssssssssssssssssssssssssssso
+ssssssssssssssssssssssssssssssssso = S ssssssssssssssssssssssssssssssssso
+sssssssssssssssssssssssssssssssssso = S sssssssssssssssssssssssssssssssssso
+ssssssssssssssssssssssssssssssssssso = S ssssssssssssssssssssssssssssssssssso
+sssssssssssssssssssssssssssssssssssso = S sssssssssssssssssssssssssssssssssssso
+ssssssssssssssssssssssssssssssssssssso = S ssssssssssssssssssssssssssssssssssssso
+sssssssssssssssssssssssssssssssssssssso = S sssssssssssssssssssssssssssssssssssssso
+ssssssssssssssssssssssssssssssssssssssso = S ssssssssssssssssssssssssssssssssssssssso
+sssssssssssssssssssssssssssssssssssssssso = S sssssssssssssssssssssssssssssssssssssssso
+ssssssssssssssssssssssssssssssssssssssssso = S ssssssssssssssssssssssssssssssssssssssssso
+sssssssssssssssssssssssssssssssssssssssssso = S sssssssssssssssssssssssssssssssssssssssssso
+ssssssssssssssssssssssssssssssssssssssssssso = S ssssssssssssssssssssssssssssssssssssssssssso
+sssssssssssssssssssssssssssssssssssssssssssso = S sssssssssssssssssssssssssssssssssssssssssssso
 

@@ -54,3 +54,12 @@ intToNat x = if x <= 0
 natToInt :: Nat -> Integer 
 natToInt O = 0 
 natToInt (S n') = 1 + natToInt n' 
+
+
+-- abbrevs (syntactic sugar)
+o, so, sso, ssso :: Nat
+o    = O
+so   = S o
+sso  = S so
+ssso = S sso
+
