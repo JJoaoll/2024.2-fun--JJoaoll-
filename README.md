@@ -1,5 +1,11 @@
 # Functional Programming 2024.2, UFRN
 
+### About
+The "FUN" stands for "Functional". So here's my personal study stuff in Functional Programming at **UFRN**.  
+I really don't expect that this will help anyone besides me, just for downloading my files to other devices.  
+Well, ty if you're here for some reason anyway :)
+
+
 Student template repo.
 (Students should replace this text.)
 
