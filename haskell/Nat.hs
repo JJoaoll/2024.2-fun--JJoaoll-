@@ -3,9 +3,10 @@ module ExNat where
 import Prelude
     ( Int
     , Show(..)
+    , Enum(..)
     , Eq(..)
     , Ord(..)
-    , Num(.. )
+    , Num(.. ) 
     , Integral
     , Bool(..)
     , not
@@ -17,37 +18,53 @@ import Prelude
     , undefined
     , error
     , otherwise
-   ) 
+   )  
+
+import qualified Prelude as P 
+import qualified Data.List as L 
+import qualified Data.Char as C 
 
 data Nat = O | S Nat
 
 n = S $ S $ S O 
 m = S $ S O
 
-toInt :: Nat -> Int
+toInt :: Nat -> P.Int
 
 toInt O     = 0 
 toInt (S n) = 1 + toInt n
 
-instance Show Nat where
+instance Enum Nat where
+    toEnum n = if n <= 0 
+               then O 
+               else S (toEnum (n - 1))
+
+fromEnum :: Nat -> Int 
+fromEnum O = 0
+fromEnum (S n) = 1 + ExNat.fromEnum n                                                       
+
+
+
+
+instance P.Show Nat where
     show n =  show (toInt n)
     --show O     = "O" 
     --show (S n) = 'S':show n
 
-instance Eq Nat where
+instance P.Eq Nat where
     O == O         = True  
     (S n) == (S m) = n == m
     _ == _         = False
 
-instance Ord Nat where
+instance P.Ord Nat where
    O <= m   = True 
    S n <= O = False
    S n <= S m = n <=m
 
-minn :: Nat -> Nat -> Nat 
-minn O m         = O 
-minn n O         = O  
-minn (S n) (S m) = S (minn n m)
+minc :: Nat -> Nat -> Nat 
+minc O m         = O 
+minc n O         = O  
+minc (S n) (S m) = S (minc n m)
 
 
 mmin :: (Nat, Nat)  -> Nat
@@ -60,7 +77,7 @@ mmax (n, O)     = n
 mmax (O, m)     = m 
 mmax (S n, S m) = S (mmax (n, m))
 
-isZero :: Nat -> Bool
+isZero :: Nat -> P.Bool
 isZero O = True 
 isZero _ = False
 
@@ -68,11 +85,12 @@ pred :: Nat -> Nat
 pred O     = O 
 pred (S n) = n
 
-even :: Nat -> Bool
-even O     = True 
+even :: Nat -> P.Bool
+even O     = True
+
 even (S n) = odd n 
 
-odd :: Nat -> Bool
+odd :: Nat -> P.Bool
 odd O     = False 
 odd (S n) = even n
 
@@ -94,7 +112,7 @@ S n <*> m = m <+> (n <*> m)
 n <^> O   = S O 
 n <^> S m = n <*> (n <^> m)
 
-instance Num Nat where
+instance P.Num Nat where
     (+) = (<+>)
     (*) = (<*>)
     (-) = (<->)
@@ -117,7 +135,7 @@ n <%> m = if n >= m
           else n
   where n' = n <-> m
 
-(<|>) :: Nat -> Nat -> Bool
+(<|>) :: Nat -> Nat -> P.Bool
 n <|> m = case n <%> m of 
               O -> True 
               _ -> False
@@ -131,6 +149,11 @@ absDiff n m = mmax(n, m) <-> mmin(n, m)
 fact :: Nat -> Nat
 fact O  =  S O
 fact (S n) = n * fact n
+
+fib :: Nat -> Nat 
+fib O         = O
+fib (S O)     = S O 
+fib (S (S n)) = fib n + fib (S n)
 
 sg :: Nat -> Nat
 sg O = O
@@ -146,12 +169,12 @@ log n m = if n >= m
           else O 
   where n' = n </> m 
 
-toNat :: Integral a => a -> Nat
+toNat :: P.Integral a => a -> Nat
 toNat x = if x <= 0 
           then O  
           else toNat (x - 1)
 
-fromNat :: Integral a => Nat -> a
+fromNat :: P.Integral a => Nat -> a
 fromNat O     = 0
 fromNat (S n) = 1 + fromNat n
 
