@@ -49,3 +49,6 @@ atLeastTwo _ = False
 firstTwo :: [a] -> (a,a) 
 firstTwo (x:y:_) = (x,y)
 firstTwo _ = error "nao tem 2 primeiros"
+
+mmap :: (a -> b) -> [a] -> [b] 
+mmap f (a:as) = (f a) : (mmap f as)
