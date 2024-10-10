@@ -142,8 +142,8 @@ log _ O     = error "nao ha log pra base 0"
 log _ (S O) = error "nao ha log para base SO"
  
 log n m = if n >= m 
-         then S (log n' m) 
-         else O 
+          then S (log n' m) 
+          else O 
   where n' = n </> m 
 
 toNat :: Integral a => a -> Nat
