@@ -1,9 +1,8 @@
 module ExNat where
 
-
-
 import Prelude
-    ( Show(..)
+    ( Int
+    , Show(..)
     , Eq(..)
     , Ord(..)
     , Num(.. )
@@ -25,9 +24,15 @@ data Nat = O | S Nat
 n = S $ S $ S O 
 m = S $ S O
 
+toInt :: Nat -> Int
+
+toInt O     = 0 
+toInt (S n) = 1 + toInt n
+
 instance Show Nat where
-    show O     = "O" 
-    show (S n) = 'S':show n
+    show n =  show (toInt n)
+    --show O     = "O" 
+    --show (S n) = 'S':show n
 
 instance Eq Nat where
     O == O         = True  
@@ -73,7 +78,7 @@ odd (S n) = even n
 
 (<+>) :: Nat -> Nat -> Nat
 n <+> O     = n 
-n <+> S m = S n <+> m
+n <+> S m = S (n <+> m)
 
 (<->) :: Nat -> Nat -> Nat
 n <-> O = n 
@@ -98,7 +103,7 @@ instance Num Nat where
     fromInteger x
         | x < 0     = O 
         | x == 0    = O
-        | otherwise = fromInteger (x - 1)
+        | otherwise = S (fromInteger (x - 1))
 
 (</>) :: Nat -> Nat -> Nat
 n </> m = if n >= m
@@ -131,9 +136,15 @@ sg :: Nat -> Nat
 sg O = O
 sg _ = 1
 
--- lo b a is the floor of the logarithm base b of a
-lo :: Nat -> Nat -> Nat
-lo = undefined
+log :: Nat -> Nat -> Nat
+log O _     = error "nao ha log de 0"
+log _ O     = error "nao ha log pra base 0"
+log _ (S O) = error "nao ha log para base SO"
+ 
+log n m = if n >= m 
+         then S (log n' m) 
+         else O 
+  where n' = n </> m 
 
 toNat :: Integral a => a -> Nat
 toNat x = if x <= 0 
@@ -141,7 +152,9 @@ toNat x = if x <= 0
           else toNat (x - 1)
 
 fromNat :: Integral a => Nat -> a
-fromNat = undefined
+fromNat O     = 0
+fromNat (S n) = 1 + fromNat n
+
 
 
 -- abbrevs (syntactic sugar) to the 50 first Nat`s :PPP
