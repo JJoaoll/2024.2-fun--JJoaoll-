@@ -144,11 +144,33 @@ rem (n, m) = n <%> m
 succLeft :: (Nat, Nat) -> (Nat, Nat)
 succLeft (n, m) = (S n, m)
 
-div :: (Nat, Nat) -> (Nat, Nat) 
-div (n,m) = if n >= m 
-            then let (x,y) = (n-m,m) in succLeft (div(x,y))
-            else (O, n)
+div1Try1 :: (Nat, Nat) -> (Nat, Nat) 
+div1Try1 (n,m) = if n >= m 
+                 then let (x,y) = (n-m, m) in succLeft (div1Try1 (x,y))
+                 else (O, n)
 
+div2Try1 :: (Nat, Nat) -> (Nat, Nat) 
+div2Try1 (n,m) = if n >= m
+                 then succLeft (div2Try1 (x,y)) 
+                 else (O, n)
+  where (x,y) = (n-m, m)
+
+div1 :: (Nat, Nat) -> (Nat, Nat) 
+div1 (n,m) = if n >= m 
+             then let (q,r) = div1(n-m, m) in (S q, r)
+             else (O, n) 
+
+div2 :: (Nat, Nat) -> (Nat, Nat) 
+div2 (n,m) = if n >= m
+             then (S q, r)  
+             else (O, n)
+  where (q, r) = div2 (n-m, m)
+
+div :: (Nat, Nat) -> (Nat, Nat) 
+div = div1
+
+divC :: Nat -> Nat -> (Nat, Nat) 
+divC n m = div (n, m) 
 
 (<|>) :: Nat -> Nat -> P.Bool
 n <|> m = case n <%> m of 
