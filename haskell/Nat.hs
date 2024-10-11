@@ -176,7 +176,15 @@ divC n m = div (n, m)
 n <|> m = case n <%> m of 
               O -> True 
               _ -> False
-divides = (<|>)
+divides = (<|>) 
+
+gcd :: (Nat, Nat) -> Nat 
+gcd (n, O) = n 
+gcd (O, m) = m 
+gcd (n, m) = gcd (m, rem (n, m))
+
+lcm :: (Nat, Nat) -> Nat 
+lcm (n, m) = (n * m) </> gcd (n, m)
 
 absDiff :: Nat -> Nat -> Nat
 absDiff n m = mmax(n, m) <-> mmin(n, m)

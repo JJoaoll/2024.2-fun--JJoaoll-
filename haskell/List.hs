@@ -52,3 +52,6 @@ firstTwo _ = error "nao tem 2 primeiros"
 
 mmap :: (a -> b) -> [a] -> [b] 
 mmap f (a:as) = (f a) : (mmap f as)
+
+-- queria GCD e LCM pra uma lista de inteiros... Mas de uma forma geral ...
+-- thing :: ((a, a) -> a) -> [a] -> a. 
