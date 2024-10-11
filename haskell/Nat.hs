@@ -34,10 +34,10 @@ toInt :: Nat -> P.Int
 toInt O     = 0 
 toInt (S n) = 1 + toInt n
 
-instance Enum Nat where
+{- instance Enum Nat where
     toEnum n = if n <= 0 
                then O 
-               else S (toEnum (n - 1))
+               else S (toEnum (n - 1)) -}
 
 fromEnum :: Nat -> Int 
 fromEnum O = 0
@@ -129,11 +129,26 @@ n </> m = if n >= m
           else O
   where n' = n <-> m
 
+quot :: (Nat, Nat) -> Nat 
+quot (n, m) = n </> m
+
 (<%>) :: Nat -> Nat -> Nat
 n <%> m = if n >= m 
           then n' <%> m 
           else n
   where n' = n <-> m
+
+rem :: (Nat, Nat) -> Nat 
+rem (n, m) = n <%> m
+
+succLeft :: (Nat, Nat) -> (Nat, Nat)
+succLeft (n, m) = (S n, m)
+
+div :: (Nat, Nat) -> (Nat, Nat) 
+div (n,m) = if n >= m 
+            then let (x,y) = (n-m,m) in succLeft (div(x,y))
+            else (O, n)
+
 
 (<|>) :: Nat -> Nat -> P.Bool
 n <|> m = case n <%> m of 
@@ -151,9 +166,8 @@ fact O  =  S O
 fact (S n) = n * fact n
 
 fib :: Nat -> Nat 
-fib O         = O
-fib (S O)     = S O 
 fib (S (S n)) = fib n + fib (S n)
+fib n         = n
 
 sg :: Nat -> Nat
 sg O = O
