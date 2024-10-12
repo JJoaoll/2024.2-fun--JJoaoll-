@@ -220,7 +220,7 @@ log n m = if n >= m
 toNat :: P.Integral a => a -> Nat
 toNat x = if x <= 0 
           then O  
-          else toNat (x - 1)
+          else S (toNat (x - 1))
 
 fromNat :: P.Integral a => Nat -> a
 fromNat O     = 0
