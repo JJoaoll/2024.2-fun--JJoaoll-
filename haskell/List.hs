@@ -25,14 +25,15 @@ filterr judge (Cons x xs) = if judge x
 (+++) :: [a] -> [a] -> [a]
 [] +++ ys     = ys 
 (x:xs) +++ ys = x:(xs +++ ys)
-
+ 
 len :: [a] -> Int
 len []       = 0
 len (x : xs) = 1 + len xs 
 
 rev :: [a] -> [a]
-rev [] = [] 
+rev []        = [] 
 rev (x : xs) = rev xs ++ [x]
+
 
 app :: [a] -> a -> [a]
 app xs x = xs ++ [x]

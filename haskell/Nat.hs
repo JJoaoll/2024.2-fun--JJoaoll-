@@ -108,6 +108,8 @@ S n <*> m = m <+> (n <*> m)
 n <^> O   = S O 
 n <^> S m = n <*> (n <^> m)
 
+
+
 instance P.Num Nat where
     (+) = (<+>)
     (*) = (<*>)
@@ -118,6 +120,8 @@ instance P.Num Nat where
         | x < 0     = O 
         | x == 0    = O
         | otherwise = S (fromInteger (x - 1))
+
+(^) = (<^>)
 
 (</>) :: Nat -> Nat -> Nat
 n </> m = if n >= m
