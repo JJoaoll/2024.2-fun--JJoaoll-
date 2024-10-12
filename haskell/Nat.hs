@@ -24,33 +24,30 @@ import qualified Prelude as P
 import qualified Data.List as L 
 import qualified Data.Char as C 
 
-data Nat = O | S Nat
+data Nat = O | S Nat 
 
 n = S $ S $ S O 
 m = S $ S O
 
 toInt :: Nat -> P.Int
-
 toInt O     = 0 
 toInt (S n) = 1 + toInt n
 
-{- instance Enum Nat where
-    toEnum n = if n <= 0 
-               then O 
-               else S (toEnum (n - 1)) -}
+instance (P.Enum Nat) where
+    toEnum :: Int -> Nat 
+    toEnum = toNat                                                       
 
-fromEnum :: Nat -> Int 
-fromEnum O = 0
-fromEnum (S n) = 1 + ExNat.fromEnum n                                                       
+    fromEnum :: Nat -> Int 
+    fromEnum = toInt 
 
-
+   
+   
 
 
 instance P.Show Nat where
     show n =  show (toInt n)
     --show O     = "O" 
     --show (S n) = 'S':show n
-
 instance P.Eq Nat where
     O == O         = True  
     (S n) == (S m) = n == m
@@ -217,7 +214,7 @@ log n m = if n >= m
 toNat :: P.Integral a => a -> Nat
 toNat x = if x <= 0 
           then O  
-          else toNat (x - 1)
+          else S (toNat (x - 1))
 
 fromNat :: P.Integral a => Nat -> a
 fromNat O     = 0
