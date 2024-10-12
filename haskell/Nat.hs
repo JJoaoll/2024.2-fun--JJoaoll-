@@ -87,7 +87,6 @@ pred (S n) = n
 
 even :: Nat -> P.Bool
 even O     = True
-
 even (S n) = odd n 
 
 odd :: Nat -> P.Bool
@@ -129,7 +128,8 @@ n </> m = if n >= m
           else O
   where n' = n <-> m
 
-quot :: (Nat, Nat) -> Nat 
+quot :: (Nat, Nat) -> Nat
+quot (_, O) = error "Nao pode dividir por 0 :P"
 quot (n, m) = n </> m
 
 (<%>) :: Nat -> Nat -> Nat
@@ -139,6 +139,7 @@ n <%> m = if n >= m
   where n' = n <-> m
 
 rem :: (Nat, Nat) -> Nat 
+rem (_, O) = error "Nao pode dividir por 0 :P"
 rem (n, m) = n <%> m
 
 succLeft :: (Nat, Nat) -> (Nat, Nat)
