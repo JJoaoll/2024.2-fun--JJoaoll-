@@ -11,6 +11,7 @@ import Prelude
 import qualified Prelude   as P
 import qualified Data.List as L
 import qualified Data.Char as C
+import Nat 
 
 -- to use a function from a qualified import
 -- you need to prefix its name with its alias
@@ -90,15 +91,42 @@ maximum []     = error "this list is empty"
 maximum [x]    = x 
 maximum (x':x'':xs) = maximum (x:xs) where x = P.max x' x''
 
--- take
--- drop
+take :: Nat -> [a] -> [a] 
+take _ []         = []
+take O _          = [] 
+take (S n) (x:xs) = x : take n xs
 
--- takeWhile
--- dropWhile
+drop :: Nat -> [a] -> [a] 
+drop _ []         = []
+drop O xs         = xs 
+drop (S n) (x:xs) = drop n xs 
 
--- tails
--- init
--- inits
+takeWhile :: (a -> Bool) -> [a] -> [a]
+takewhile _ []     = [] 
+takeWhile f (x:xs) = if f x 
+                     then x : takeWhile f xs 
+                     else []
+
+
+dropWhile :: (a -> Bool) -> [a] -> [a]
+dropWhile _ []     = [] 
+dropWhile f (x:xs) = if f x 
+                     then dropWhile f xs 
+                     else x:xs
+
+tails :: [a] -> [[a]] 
+tails []     = [[]]
+tails (x:xs) = (x:xs) : tails xs
+
+init :: [a] -> [a] 
+init []     = error "empty list" 
+init [x]    = [] 
+init (x:xs) = x : init xs 
+
+inits :: [a] -> [[a]]
+inits []     = [[]] 
+inits xs     = append xs (inits (init xs)) 
+
 
 -- subsequences
 
@@ -115,10 +143,21 @@ maximum (x':x'':xs) = maximum (x:xs) where x = P.max x' x''
 -- elem': same as elem but elementary definition
 -- (without using other functions except (==))
 
--- (!!)
+(!!) :: [a] -> Nat -> a 
+xs !! O         = case head xs of    
+                  P.Just x -> x 
+                  P.Nothing -> error "ai foi dms, bixo"
+(x:xs) !! (S n) = xs !! n
 
--- filter
--- map
+filter :: (a -> Bool) -> [a] -> [a]
+filter _ []     = []
+filter f (x:xs) = if f x 
+                  then x : filter f xs 
+                  else filter f xs
+
+map :: (a -> b) -> [a] -> [b] 
+map _ []     = [] 
+map f (x:xs) = f x : map f xs
 
 -- cycle
 -- repeat
@@ -146,6 +185,8 @@ maximum (x':x'':xs) = maximum (x:xs) where x = P.max x' x''
 -- unwords
 
 -- transpose
+
+-- pi 
 
 -- checks if the letters of a phrase form a palindrome (see below for examples)
 palindrome :: String -> Bool

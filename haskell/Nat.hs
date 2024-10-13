@@ -1,4 +1,4 @@
-module ExNat where
+module Nat where
 
 import Prelude
     ( Int
