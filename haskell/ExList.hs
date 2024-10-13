@@ -45,13 +45,17 @@ product :: Num a => [a] -> a
 product []     = 1 
 product (x:xs) = x * product xs
 
-
+append :: a -> [a] -> [a]
+append x [] = [x]
+append x (y:ys) = y:(append x ys) 
 
 reverse :: [a] -> [a]
-reverse = undefined
+reverse [] = [] 
+reverse (x:xs) = append x (reverse xs)
 
 (++) :: [a] -> [a] -> [a]
-(++) = undefined
+xs ++ []     = xs
+xs ++ (y:ys) = append y xs ++ ys
 
 -- right-associative for performance!
 -- (what?!)
@@ -59,12 +63,14 @@ infixr 5 ++
 
 -- (snoc is cons written backwards)
 snoc :: a -> [a] -> [a]
-snoc = undefined
+snoc x []     = [x]
+snoc x (y:ys) = y:(snoc x ys)
 
 (<:) :: [a] -> a -> [a]
 (<:) = flip snoc
 
 -- different implementation of (++)
+-- ??????????????
 (+++) :: [a] -> [a] -> [a]
 xs +++ []     = xs
 xs +++ [y]    = xs <: y
@@ -74,8 +80,15 @@ xs +++ (y:ys) = (xs +++ [y]) +++ ys
 -- (hmm?)
 infixl 5 +++
 
--- minimum :: Ord a => [a] -> a
--- maximum :: Ord a => [a] -> a
+minimum :: Ord a => [a] -> a
+minimum []     = error "this list is empty"
+minimum [x]    = x 
+minimum (x':x'':xs) = minimum (x:xs) where x = P.min x' x''
+
+maximum :: Ord a => [a] -> a
+maximum []     = error "this list is empty"
+maximum [x]    = x 
+maximum (x':x'':xs) = maximum (x:xs) where x = P.max x' x''
 
 -- take
 -- drop
