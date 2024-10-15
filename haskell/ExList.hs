@@ -5,7 +5,7 @@ import Prelude
     , Num(..) , Integral(..) , Enum(..) , Ord(..) , Eq(..)
     , not , (&&) , (||)
     , (.) , ($)
-    , flip , curry , uncurry
+    , curry , uncurry
     , otherwise , error , undefined
     )
 import qualified Prelude   as P
@@ -24,11 +24,11 @@ import Nat
 
 head :: [a] -> P.Maybe a
 head []     = P.Nothing 
-head (x:xs) = P.Just x 
+head (x:_) = P.Just x 
 
 tail :: [a] -> [a]
 tail []     = [] 
-tail (x:xs) = xs 
+tail (_:xs) = xs 
 
 null :: [a] -> Bool
 null [] = True 
@@ -66,6 +66,10 @@ infixr 5 ++
 snoc :: a -> [a] -> [a]
 snoc x []     = [x]
 snoc x (y:ys) = y:(snoc x ys)
+
+flip :: (a -> b -> c) -> (b -> a -> c) 
+flip f x y = f y x
+-- flip f = \x -> \y -> f y x
 
 (<:) :: [a] -> a -> [a]
 (<:) = flip snoc
@@ -127,7 +131,6 @@ inits :: [a] -> [[a]]
 inits []     = [[]] 
 inits xs     = append xs (inits (init xs)) 
 
-
 -- subsequences
 
 -- any
@@ -142,6 +145,7 @@ inits xs     = append xs (inits (init xs))
 
 -- elem': same as elem but elementary definition
 -- (without using other functions except (==))
+
 
 (!!) :: [a] -> Nat -> a 
 xs !! O         = case head xs of    
@@ -159,9 +163,17 @@ map :: (a -> b) -> [a] -> [b]
 map _ []     = [] 
 map f (x:xs) = f x : map f xs
 
--- cycle
+copy :: [a] -> [a] 
+copy [] = [] 
+copy (x:xs) = x : copy xs 
+
+cycle :: [a] -> [a] 
+cycle [] = error "empty list"
+cycle xs = (copy xs) ++ cycle xs
 -- repeat
--- replicate
+replicate :: Nat -> a -> [a]
+replicate O _     = []
+replicate (S n) x = x : replicate n x
 
 -- isPrefixOf
 -- isInfixOf

@@ -32,6 +32,7 @@ m = S $ S O
 toInt :: Nat -> P.Int
 toInt O     = 0 
 toInt (S n) = 1 + toInt n
+  
 
 instance (P.Enum Nat) where
     toEnum :: Int -> Nat 
@@ -39,10 +40,6 @@ instance (P.Enum Nat) where
 
     fromEnum :: Nat -> Int 
     fromEnum = toInt 
-
-   
-   
-
 
 instance P.Show Nat where
     show n =  show (toInt n)
@@ -107,8 +104,6 @@ S n <*> m = m <+> (n <*> m)
 (<^>) :: Nat -> Nat -> Nat
 n <^> O   = S O 
 n <^> S m = n <*> (n <^> m)
-
-
 
 instance P.Num Nat where
     (+) = (<+>)
