@@ -192,7 +192,7 @@ absDiff n m = mmax(n, m) <-> mmin(n, m)
 
 fact :: Nat -> Nat
 fact O  =  S O
-fact (S n) = n * fact n
+fact (S n) = S n * fact n
 
 fib :: Nat -> Nat 
 fib (S (S n)) = fib n + fib (S n)

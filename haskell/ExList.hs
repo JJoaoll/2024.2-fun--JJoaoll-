@@ -88,7 +88,8 @@ infixl 5 +++
 minimum :: Ord a => [a] -> a
 minimum []     = error "this list is empty"
 minimum [x]    = x 
-minimum (x':x'':xs) = minimum (x:xs) where x = P.min x' x''
+minimum (x:xs) = P.min x (minimum xs)
+-- minimum (x':x'':xs) = minimum (x:xs) where x = P.min x' x''
 
 maximum :: Ord a => [a] -> a
 maximum []     = error "this list is empty"
@@ -103,7 +104,9 @@ take (S n) (x:xs) = x : take n xs
 drop :: Nat -> [a] -> [a] 
 drop _ []         = []
 drop O xs         = xs 
-drop (S n) (x:xs) = drop n xs 
+drop (S n) (_:xs) = drop n xs 
+
+
 
 takeWhile :: (a -> Bool) -> [a] -> [a]
 takewhile _ []     = [] 
@@ -118,6 +121,20 @@ dropWhile f (x:xs) = if f x
                      then dropWhile f xs 
                      else x:xs
 
+
+fromWhile :: Nat -> (a -> Bool) -> [a] -> [a]
+-- fromWhile n p xs = takeWhile p (drop n xs)
+fromWhile n p = takeWhile p . drop n 
+
+fromFor :: Nat -> Nat -> [a] -> [a]
+fromFor n m = take m . drop n
+
+fromTo :: Nat -> Nat -> [a] -> [a]
+fromTo n m = take (S (m - n)) . drop n 
+
+fromToThat :: Nat -> Nat -> (a -> Bool) -> [a] -> [a]
+fromToThat n m p = filter p . fromTo n m 
+
 tails :: [a] -> [[a]] 
 tails []     = [[]]
 tails (x:xs) = (x:xs) : tails xs
@@ -131,7 +148,15 @@ inits :: [a] -> [[a]]
 inits []     = [[]] 
 inits xs     = append xs (inits (init xs)) 
 
+stretch :: Nat -> [a] -> [a] 
+stretch _ []     = [] 
+stretch n (x:xs) = replicate n x ++ stretch n xs 
 -- subsequences
+
+countdown :: Nat -> [Nat] 
+countdown O     = [O]
+countdown (S n) = S n : countdown n 
+
 
 -- any
 -- all
