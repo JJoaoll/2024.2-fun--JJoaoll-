@@ -189,8 +189,7 @@ map _ []     = []
 map f (x:xs) = f x : map f xs
 
 copy :: [a] -> [a] 
-copy [] = [] 
-copy (x:xs) = x : copy xs 
+copy xs = map P.id xs
 
 cycle :: [a] -> [a] 
 cycle [] = error "empty list"
