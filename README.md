@@ -1,3 +1,4 @@
+
 # Functional Programming 2024.2, UFRN
 
 ### About
@@ -7,7 +8,7 @@ Well, ty if you're here for some reason anyway :)
 
 
 Student template repo.
-(Students should replace this text.)
+(I have already replace it)
 
 ## Structure
 
@@ -23,3 +24,4 @@ Student template repo.
 
 [2024.2-fun-site]: https://tsouanas.org/teaching/fun/2024.2/
 [2024.2-fun]:      https://github.com/tsouanas/2024.2-fun
+om/tsouanas/2024.2-fun

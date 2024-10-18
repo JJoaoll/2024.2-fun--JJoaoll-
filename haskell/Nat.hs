@@ -100,7 +100,6 @@ S n <-> S m = n <-> m
 O <*> m   = O 
 S n <*> m = m <+> (n <*> m)
 
-
 (<^>) :: Nat -> Nat -> Nat
 n <^> O   = S O 
 n <^> S m = n <*> (n <^> m)
@@ -220,8 +219,6 @@ toNat x = if x <= 0
 fromNat :: P.Integral a => Nat -> a
 fromNat O     = 0
 fromNat (S n) = 1 + fromNat n
-
-
 
 -- abbrevs (syntactic sugar) to the 50 first Nat`s :PPP
 
