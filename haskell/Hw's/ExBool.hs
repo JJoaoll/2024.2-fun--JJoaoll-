@@ -29,10 +29,12 @@ instance Show Bool where
     show _    = "F"
 
 instance Enum Bool where
+    toEnum x = if x >= 0  
+               then True 
+               else False 
 
-    toEnum  = undefined
-
-    fromEnum  = undefined
+    fromEnum True  = 1 
+    fromEnum False = -1
 
 -- conjunction (AND)
 (&&) :: Bool -> Bool -> Bool
