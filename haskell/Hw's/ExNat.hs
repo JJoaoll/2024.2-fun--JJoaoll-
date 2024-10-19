@@ -190,7 +190,7 @@ instance Num Nat where
     (-) = (<->)
     abs = id 
     signum = sg
-    fromInteger x
-      | x <= 0     = O 
+    fromInteger x 
+      | x <= 0   = O 
       | otherwise = S (fromInteger (x - 1))
-
+     

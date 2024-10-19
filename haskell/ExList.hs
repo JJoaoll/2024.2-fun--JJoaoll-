@@ -199,6 +199,15 @@ replicate :: Nat -> a -> [a]
 replicate O _     = []
 replicate (S n) x = x : replicate n x
 
+range :: Nat -> Nat -> [Nat] 
+range n m 
+  | n == m = [m] 
+  | n < m  = n : range (S n) m  
+  | n > m  = n : range (pred n) m   
+               
+
+
+
 -- isPrefixOf
 -- isInfixOf
 -- isSuffixOf

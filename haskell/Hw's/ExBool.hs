@@ -1,6 +1,5 @@
 module ExBool where
 
--- Do not alter this import!
 import Prelude
     ( Show(..)
     , Eq(..)
@@ -29,11 +28,14 @@ instance Show Bool where
     show _    = "F"
 
 instance Enum Bool where
-    toEnum x = if x >= 0  
-               then True 
-               else False 
+    toEnum :: Int -> Bool
+    toEnum 0 = True
+    toEnum _ = False 
+   {-toEnum x = if x >= 0  
+              then ExBool.True 
+              else ExBool.False-}
 
-    fromEnum True  = 1 
+    fromEnum True  = 0 
     fromEnum False = -1
 
 -- conjunction (AND)

@@ -220,6 +220,33 @@ fromNat :: P.Integral a => Nat -> a
 fromNat O     = 0
 fromNat (S n) = 1 + fromNat n
 
+predH :: Nat -> Nat 
+predH O     = O 
+predH (S n) = n
+
+rangeH :: Nat -> Nat -> [Nat]
+rangeH n m
+  | n == m = [m]
+  | n < m  = n : rangeH (S n) m
+  | n > m  = n : rangeH (predH n) m
+  
+
+range :: Nat -> Nat -> [Nat]
+range O O   = [O]
+range O m   = O : range (S O) m
+range (S n) m    
+  | n' == m = [m]
+  | n' < m  = n' : range (S n') m
+  | n' > m  = n' : range n m
+   where n' = (S n)  
+
+itr :: (a -> a) -> Nat -> (a -> a)
+itr f O     = f 
+itr f (S n) = f . (itr f n) 
+
+(<<^>>) :: Nat -> Nat -> Nat 
+(<<^>>) n m = itr (n * ) m n 
+
 -- abbrevs (syntactic sugar) to the 50 first Nat`s :PPP
 
 o    = O
