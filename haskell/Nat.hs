@@ -24,6 +24,9 @@ import qualified Prelude as P
 import qualified Data.List as L 
 import qualified Data.Char as C 
 
+
+data RGB = R Nat | G Nat | B Nat 
+  deriving(Show, Eq)
 data Nat = O | S Nat 
 
 n = S $ S $ S O 
@@ -43,8 +46,8 @@ instance (P.Enum Nat) where
 
 instance P.Show Nat where
     show n =  show (toInt n)
-    --show O     = "O" 
-    --show (S n) = 'S':show n
+  --  show O     = "O" 
+  --  show (S n) = 'S':show n
 instance P.Eq Nat where
     O == O         = True  
     (S n) == (S m) = n == m

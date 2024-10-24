@@ -1,6 +1,6 @@
 module ExCurry where
-
-import Prelude hiding ( curry , uncurry )
+import ExNat 
+import Prelude hiding ( curry , uncurry,)
 
 -- use your mind to infer the types, don't cheat!
 
@@ -13,5 +13,13 @@ curry f a b = f (a, b)
 -- and returns its "traditional" binary version
 uncurry :: (a -> b -> c) -> ((a,b) -> c)
 uncurry f (a,b) = f a b
+
+addC :: Nat -> Nat -> Nat     
+n `addC` O     = n 
+n `addC` (S m) = S (n `addC` m)
+
+add :: (Nat, Nat) -> Nat     
+add (n , O)     = n 
+add (n, (S m)) = S (add (n, m))
 
 

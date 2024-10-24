@@ -157,6 +157,8 @@ countdown :: Nat -> [Nat]
 countdown O     = [O]
 countdown (S n) = S n : countdown n 
 
+firstWith :: (a -> Bool) -> [a] -> P.Maybe a 
+firstWith p = head . filter p
 
 -- any
 -- all
@@ -198,13 +200,13 @@ cycle xs = (copy xs) ++ cycle xs
 replicate :: Nat -> a -> [a]
 replicate O _     = []
 replicate (S n) x = x : replicate n x
-
+{-  
 range :: Nat -> Nat -> [Nat] 
 range n m 
   | n == m = [m] 
   | n < m  = n : range (S n) m  
   | n > m  = n : range (pred n) m   
-               
+    -}           
 
 
 

@@ -80,19 +80,30 @@ pred :: Nat -> Nat
 pred O     = O 
 pred (S n) = n
 
+
+
+replct :: Nat -> a -> [a]
+replct O _     = []
+replct (S n) x = x : replct n x
+
+pw :: (Nat -> Nat -> Nat) -> Nat -> [Nat] -> Nat 
+pw _ id []     = id  
+pw f id (x:xs) = f x (pw f id xs) 
+
+h = hyper 
+
+
 itr :: (Nat -> Nat) -> Nat -> Nat -> Nat
 itr f O m     = m 
 itr f (S n) m = f (itr f n m)  
 
-h = hyper 
-
 hyper :: Integral i => i -> (Nat -> Nat -> Nat)
 hyper 0 n m = itr S n m
-hyper 1 n m = itr (hyper 0 n) m n  
+hyper 1 n m = itr (hyper 0 n) m n
 hyper x n m = itr (hyper (x-1) n) m (S O) 
 --hyper 1 n = add 
 --hyper x = nextLv (hyper (x - 1)) (toNat (x - 2))
 
-
+{-  -}--hyper 2 n m = pw  (hyper 1) (S O) (replct n m)
 -- S $ (itr (hyper (y - 1) n) n m)      
 
