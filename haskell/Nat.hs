@@ -74,6 +74,20 @@ mmax (n, O)     = n
 mmax (O, m)     = m 
 mmax (S n, S m) = S (mmax (n, m))
 
+curry :: ((a, b) -> c) -> (a -> b -> c) 
+curry f x y = f (x, y)  
+
+maxx :: Nat -> Nat -> Nat 
+maxx = curry mmax
+
+infinity :: Nat 
+infinity = S infinity
+ -- falhei:
+maxX :: [Nat] -> Nat 
+maxX [] = error "empty list"
+maxX ns = L.foldl maxx infinity ns 
+
+
 isZero :: Nat -> P.Bool
 isZero O = True 
 isZero _ = False
