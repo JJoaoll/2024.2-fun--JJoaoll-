@@ -77,15 +77,15 @@ mmax (S n, S m) = S (mmax (n, m))
 curry :: ((a, b) -> c) -> (a -> b -> c) 
 curry f x y = f (x, y)  
 
-maxx :: Nat -> Nat -> Nat 
-maxx = curry mmax
+minn :: Nat -> Nat -> Nat 
+minn = curry mmin
 
 infinity :: Nat 
 infinity = S infinity
- -- falhei:
-maxX :: [Nat] -> Nat 
-maxX [] = error "empty list"
-maxX ns = L.foldl maxx infinity ns 
+minN :: [Nat] -> Nat 
+
+minN [] = error "empty list"
+minN ns = L.foldl minn infinity ns 
 
 
 isZero :: Nat -> P.Bool
