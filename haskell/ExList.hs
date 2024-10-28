@@ -181,7 +181,12 @@ concat xs (y:ys) = concat (xs <: y) ys
 elem :: Eq a => a -> [a] -> Bool 
 elem x = any (== x) 
 
--- elem': same as elem but elementary definition
+elem2 :: Eq a => a -> [a] -> Bool
+elem2 x []     = False 
+elem2 x (y:ys) = 
+  case x == y of 
+  True  -> True 
+  False -> elem2 x ys 
 -- (without using other functions except (==))
 
 
