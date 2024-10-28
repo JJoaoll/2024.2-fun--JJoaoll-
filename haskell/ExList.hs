@@ -171,12 +171,15 @@ any p = disists . map p
 all :: (a -> Bool) -> [a] -> Bool 
 all p = conjall . map p
 
--- and
--- or
+and = conjall
+or  = disists
 
--- concat
+concat :: [a] -> [a] -> [a]
+concat xs []     = xs 
+concat xs (y:ys) = concat (xs <: y) ys 
 
--- elem using the funciton 'any' above
+elem :: Eq a => a -> [a] -> Bool 
+elem x = any (== x) 
 
 -- elem': same as elem but elementary definition
 -- (without using other functions except (==))
