@@ -107,7 +107,6 @@ drop O xs         = xs
 drop (S n) (_:xs) = drop n xs 
 
 
-
 takeWhile :: (a -> Bool) -> [a] -> [a]
 takewhile _ []     = [] 
 takeWhile f (x:xs) = if f x 
@@ -160,8 +159,17 @@ countdown (S n) = S n : countdown n
 firstWith :: (a -> Bool) -> [a] -> P.Maybe a 
 firstWith p = head . filter p
 
--- any
--- all
+conjall :: [Bool] -> Bool 
+conjall = fold (&&) True 
+
+disists :: [Bool] -> Bool 
+disists = fold (||) False
+
+any :: (a -> Bool) -> [a] -> Bool 
+any p = disists . map p
+
+all :: (a -> Bool) -> [a] -> Bool 
+all p = conjall . map p
 
 -- and
 -- or
@@ -207,6 +215,11 @@ range n m
   | n < m  = n : range (S n) m  
   | n > m  = n : range (pred n) m   
     -}           
+
+-- versao bem
+fold :: (a -> a -> a) -> a -> [a] -> a 
+fold _ e []     = e 
+fold f e (x:xs) = f x (fold f e xs)  
 
 
 
