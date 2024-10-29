@@ -90,17 +90,36 @@ pw :: (Nat -> Nat -> Nat) -> Nat -> [Nat] -> Nat
 pw _ id []     = id  
 pw f id (x:xs) = f x (pw f id xs) 
 
-h = hyper 
+itr0 :: (Nat -> Nat) -> Nat -> Nat -> Nat
+itr0 f O m     = m 
+itr0 f (S n) m = f (itr0 f n m)  
 
-
-itr :: (Nat -> Nat) -> Nat -> Nat -> Nat
-itr f O m     = m 
-itr f (S n) m = f (itr f n m)  
+itrU :: (Nat -> Nat) -> Nat -> Nat -> (Nat -> Nat)  
+itrU _ O e n     = e
+itrU f (S O) e n = n 
+itrU f (S k) e n = f (itrU f k e n)
 
 hyper :: Integral i => i -> (Nat -> Nat -> Nat)
-hyper 0 n m = itr S n m
-hyper 1 n m = itr (hyper 0 n) m n
-hyper x n m = itr (hyper (x-1) n) m (S O) 
+-- hyper 0 n m = itr S n m
+hyper 0 n m =
+  case n of 
+    O    -> O 
+    _    -> m 
+hyper 1 n m = 
+  case n of 
+    O    -> hyper 0 (S n) m  
+    S n' -> hyper 1 n' (S (hyper 0 n m))
+hyper 2 n m = 
+  case n of 
+    O    -> hyper 1 n m 
+    S n' -> hyper 2 n' (S (hyper 1 n m))
+
+{-hyper 2 n m =
+  case n of 
+    O    -> O 
+    S n' -> hyper 2 n' (hyper 1 n m)
+-}
+-- hyper x n m = itr (hyper (x-1) n) m (S O) 
 --hyper 1 n = add 
 --hyper x = nextLv (hyper (x - 1)) (toNat (x - 2))
 
