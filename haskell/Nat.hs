@@ -264,6 +264,12 @@ itr f (S n) = f . (itr f n)
 (<<^>>) :: Nat -> Nat -> Nat 
 (<<^>>) n m = itr (n * ) m n 
 
+-- Defining Nat minus
+nminus :: Nat -> Nat -> Nat
+nminus n O = n
+nminus O _ = O
+nminus (S n) (S m) = nminus n m
+
 -- abbrevs (syntactic sugar) to the 50 first Nat`s :PPP
 
 o    = O

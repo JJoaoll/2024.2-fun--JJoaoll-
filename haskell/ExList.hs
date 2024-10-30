@@ -224,16 +224,34 @@ range n m
   | n > m  = n : range (pred n) m   
     -}           
 
--- versao bem
+-- TO-REDO
 fold :: (a -> a -> a) -> a -> [a] -> a 
 fold _ e []     = e 
 fold f e (x:xs) = f x (fold f e xs)  
 
-
-
--- isPrefixOf
+isPrefixOf :: Eq a => [a] -> [a] -> Bool 
+isPrefixOf [] ys         = True 
+isPrefixOf xs []         = False 
+isPrefixOf (x:xs) (y:ys) = (x == y) && isPrefixOf xs ys 
 -- isInfixOf
--- isSuffixOf
+isSuffixOf :: Eq a => [a] -> [a] -> Bool 
+isSuffixOf [] ys         = True 
+isSuffixOf xs []         = False 
+isSuffixOf (x:xs) ys = (x == (rear ys)) && isSuffixOf xs (cutRear ys) 
+
+rear :: [a] -> a 
+rear []     = error "empty list" 
+rear [x]    = x
+rear (x:xs) = x:(rear xs) 
+
+safeRear :: [a] -> P.Maybe a 
+safeRear []     = P.Nothing 
+safeRear [x]    = P.Just x
+safeRear (x:xs) = P.Just (rear xs)
+
+cutRear :: [a] -> [a]
+cutRear (x:xs) = x:cutRear xs
+cutRear _      = []
 
 -- zip
 -- zipWith
