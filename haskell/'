@@ -120,17 +120,6 @@ dropWhile f (x:xs) = if f x
                      then dropWhile f xs 
                      else x:xs
 
--- ASSUMPTION: xs and yes are sorted
-merge :: Ord a => [a] -> [a] -> [a]
-merge xs []                 = xs
-merge [] ys                 = ys
-merge (xs'@(x:xs)) (ys'@(y:ys)) 
-  | x <= y = x:merge xs ys'
-  | y < x  = y:merge xs' ys
-
---mSort :: Ord a => [a] -> [a] 
---mSort  
-
 
 fromWhile :: Nat -> (a -> Bool) -> [a] -> [a]
 -- fromWhile n p xs = takeWhile p (drop n xs)
@@ -223,10 +212,7 @@ copy xs = map P.id xs
 cycle :: [a] -> [a] 
 cycle [] = error "empty list"
 cycle xs = (copy xs) ++ cycle xs
-
-mRepeat :: [a] -> [[a]] 
-mRepeat xs = xs : mRepeat xs
-
+-- repeat
 replicate :: Nat -> a -> [a]
 replicate O _     = []
 replicate (S n) x = x : replicate n x
@@ -279,52 +265,22 @@ zip [] _          = []
 zip _ []          = [] 
 zip (x:xs) (y:ys) = (x, y): zip xs ys 
 
-muncurry :: (a -> b -> c) -> (a, b) -> c
-muncurry f (x, y) = f x y
+--Muncurry :: (a -> b -> c) -> (a, b) -> c
+--Muncurry f (x, y) = f x y
 
-mcurry :: ((a, b) -> c) -> (a -> b -> c) 
-mcurry f a b = f (a,b)
-{-
-zipWithCurried :: (a -> b -> c) -> ([a], [b]) -> [c]
-zipWithCurried f = map (uncurry f) . (mcurry zip)
-
-zipWithLegal :: (a -> b -> c) -> [a] -> [b] -> [c] 
-zipWithLegal f xs = map (uncurry f) . (zip xs) 
+--zipWithLegal :: (a -> b -> c) -> [a] -> [b] -> [c] 
+--zipWithLegal f = map (Muncurry f) . zip
 
 zipWith :: (a -> b -> c) -> [a] -> [b] -> [c] 
 zipWith _ [] _          = [] 
 zipWith _ _ []          = [] 
 zipWith f (x:xs) (y:ys) = (f x y):zipWith f xs ys
--}
+
 
 -- intercalate
 -- nub
 
-oneToR :: ([a], [a]) -> ([a], [a])
-oneToR (xs, ys) = case xs of 
-                  []    -> (xs, ys) 
-                  x:xs' -> (xs',x:ys)
-
-
-oneToL :: ([a], [a]) -> ([a], [a])
-oneToL (xs, ys) = case ys of 
-                  []    -> (xs, ys) 
-                  y:ys' -> (xs<:y,ys')
-
-
--- aqui o "<'>" significa "decaptado"
-itr :: (a -> a) -> Nat -> (a -> a)
-itr _ O x     = x
-itr f (S n) x = f (ExList.itr f n x) 
- 
-splitAt :: Nat -> [a] -> ([a], [a])
-splitAt n = (ExList.itr oneToL n) . ([], )
---splitAt (xs'@(x:xs)) (S n) = let (ls, rs) = (x:thing,  
-
-
---splitAt n xs = case n of 
---               O    -> ([], xs) 
---               S n' -> case xs of 
+-- splitAt
 -- what is the problem with the following?:
 -- splitAt n xs  =  (take n xs, drop n xs)
 

@@ -99,20 +99,36 @@ itrU _ O e n     = e
 itrU f (S O) e n = n 
 itrU f (S k) e n = f (itrU f k e n)
 
+
+
+fold :: (a -> a -> a) -> a -> [a] -> a 
+fold _ e []     = e 
+fold f e (x:xs) = f x (fold f e xs)  
+
+repl :: Nat -> a -> [a]
+repl O _     = []
+repl (S n) x = x : repl n x
+
+
 hyper :: Integral i => i -> (Nat -> Nat -> Nat)
--- hyper 0 n m = itr S n m
-hyper 0 n m =
-  case n of 
-    O    -> O 
-    _    -> m 
+--zero-orio
+hyper 0 n m = O  
+
+-- Successorio
 hyper 1 n m = 
   case n of 
-    O    -> hyper 0 (S n) m  
-    S n' -> hyper 1 n' (S (hyper 0 n m))
-hyper 2 n m = 
-  case n of 
-    O    -> hyper 1 n m 
-    S n' -> hyper 2 n' (S (hyper 1 n m))
+    O    -> m   
+    S n' -> hyper 1 n' (S m)
+
+-- Somatorio
+hyper 2 n m = fold (hyper 1) (hyper 0 (S O) O) (repl m n)
+ 
+-- Produtorio 
+hyper 3 n m = fold (hyper 2) (hyper 1 (S O) O) (repl m n)
+
+-- ???
+hyper x n m = fold (hyper (x-1)) (hyper (x-2) (S O) O) (repl m n)
+
 
 {-hyper 2 n m =
   case n of 

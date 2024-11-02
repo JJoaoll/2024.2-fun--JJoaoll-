@@ -56,3 +56,9 @@ mmap f (a:as) = (f a) : (mmap f as)
 
 -- queria GCD e LCM pra uma lista de inteiros... Mas de uma forma geral ...
 -- thing :: ((a, a) -> a) -> [a] -> a. 
+
+xs ++++ [] = xs 
+xs ++++ (y:ys) = let (<:) = \x y -> case x of
+                                    []     -> [y]
+                                    (z:zs) -> z : (zs <: y)
+                in xs <: y ++++ ys            
