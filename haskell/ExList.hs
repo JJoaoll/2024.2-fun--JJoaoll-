@@ -318,7 +318,17 @@ itr _ O x     = x
 itr f (S n) x = f (ExList.itr f n x) 
  
 splitAt :: Nat -> [a] -> ([a], [a])
-splitAt n = (ExList.itr oneToL n) . ([], )
+-- splitAt n = (ExList.itr oneToL n) . ([], )
+
+--splitAt [] _         = ([], [])
+splitAt O xs         = ([], xs) 
+splitAt (S n) (xs) = let (ls, rs) = (splitAt n xs) 
+                     in case rs of 
+                          []      -> (ls, rs)
+                          (r:rs') -> (ls<:r,rs')
+                    
+
+
 --splitAt (xs'@(x:xs)) (S n) = let (ls, rs) = (x:thing,  
 
 
