@@ -8,7 +8,24 @@ data ArEx = Atom Integer
 
 -- pretty printer
 pretty :: ArEx -> String
-pretty = undefined
+pretty (Atom n) = show n
+pretty (Plus l r) =   "(" ++ (pretty l) ++ " + " ++ (pretty r) ++ ")"
+pretty (Times l r) =   "(" ++ (pretty l) ++ " * " ++ (pretty r) ++ ")"
+pretty (Neg ex) = "-" ++ "(-" ++ pretty ex ++ ")"
+
+pA :: ArEx -> String 
+pA (Atom x)       = " " ++ show x ++ " "
+pA ex@(Plus l r)  = lastEx ++ "\n" ++ take (length totalS) (repeat '-')  ++ " (+) \n" ++ (pretty ex) 
+  where lastEx = pA l ++ pA r 
+        totalS = pretty l ++ pretty r
+pA ex@(Times l r) = lastEx ++ "\n" ++ take (length totalS) (repeat '-')  ++ " (*) \n" ++ (pretty ex)  
+ where lastEx = pA l ++ pA r
+       totalS = pretty l ++ pretty r 
+pA ex@(Neg t) = lastEx ++ "\n" ++ take (length totalS) (repeat '-')  ++ " (-) \n" ++ (pretty ex)
+ where lastEx = pA t 
+       totalS = pretty t
+
+prettier = putStrLn . pA
 
 -- example expressions
 ex1 = (Atom 23) `Plus` (Atom 2)
