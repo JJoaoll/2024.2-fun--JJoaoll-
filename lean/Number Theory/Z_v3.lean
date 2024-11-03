@@ -1,4 +1,4 @@
-def eud (p q r : Prop) =
+def eud (p q r : Prop) = p → ⟂
 
 structure Integer where
   Z        : Type u

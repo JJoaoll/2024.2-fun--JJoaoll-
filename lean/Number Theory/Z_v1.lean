@@ -1,5 +1,5 @@
 structure Integer where
-  Z        : Type u
+  carrier  : (Z :Type u)
   zero     : Z
   one      : Z
   plus     : Z -> Z -> Z
@@ -16,3 +16,8 @@ structure Integer where
   ZM_Com   (a b : Z)   : times a b = times b a
 
   Z_DistR (d a b : Z) : times (plus a b) d = times (plus a d) (plus b d)
+
+open Integer
+
+theorem ZA_IDL : ∀(a : Z), plus zero a = a :=
+by
