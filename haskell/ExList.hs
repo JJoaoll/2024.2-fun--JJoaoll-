@@ -337,7 +337,34 @@ splitAt (S n) (xs) = let (ls, rs) = (splitAt n xs)
                           []      -> (ls, rs)
                           (r:rs') -> (ls<:r,rs')
                     
+-- nameMe :: [a] -> 
 
+put :: a -> [a] -> Nat -> [a]
+put x [] _               = [x] 
+put x ys O               = x:ys
+put x (y:ys) (S n) = y:(put x ys n) 
+
+-- Put EveryWhere
+putEw :: a -> [a] -> [[a]] -- aqui embaixo tbm daria pra usar o countdown
+putEw x ys = map (put x ys) [O .. (len ys)]
+            
+putInAll :: a -> [[a]] -> [[a]] 
+putInAll _ []           = [] 
+putInAll x [xs]         = [(put x xs $ S O),(put x xs O)] 
+putInAll x (xs:xss) = put x xs (S $ len xss):putInAll x xss
+-- como descrever isso com lets??
+{-
+putInAll x (xs:xss) = (put x xs O): case xss of 
+                                    []       -> []
+                                    (ys:yss) -> (put x ys (S O)) : case yss of 
+                                                                   [] -> []
+                                                                 (zs : zss) ...
+-} 
+-- ainda nao esta funcionado :c
+pi :: [a] -> [[a]]
+pi []     = [[]]
+pi [x]    = [[x]] 
+pi (x:xs) = putInAll x (pi xs)  
 
 --splitAt (xs'@(x:xs)) (S n) = let (ls, rs) = (x:thing,  
 
