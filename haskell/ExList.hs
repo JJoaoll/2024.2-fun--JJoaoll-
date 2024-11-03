@@ -38,6 +38,10 @@ length :: Integral i => [a] -> i
 length [] = 0 
 lenght (x:xs) = 1 + lenght xs
 
+len :: [a] -> Nat
+len []     = O 
+len (x:xs) = S (len xs)
+
 sum :: Num a => [a] -> a
 sum []     = 0 
 sum (x:xs) = x + sum xs
@@ -128,9 +132,14 @@ merge (xs'@(x:xs)) (ys'@(y:ys))
   | x <= y = x:merge xs ys'
   | y < x  = y:merge xs' ys
 
---mSort :: Ord a => [a] -> [a] 
---mSort  
+mSort :: Ord a => [a] -> [a] 
+mSort []  = [] 
+mSort [x] = [x]
+mSort xs = let (ls, rs) = (halfa xs)
+           in merge (mSort ls) (mSort rs)
 
+halfa :: [a] -> ([a], [a])
+halfa xs = splitAt (len xs </> 2) xs 
 
 fromWhile :: Nat -> (a -> Bool) -> [a] -> [a]
 -- fromWhile n p xs = takeWhile p (drop n xs)
@@ -317,11 +326,12 @@ itr :: (a -> a) -> Nat -> (a -> a)
 itr _ O x     = x
 itr f (S n) x = f (ExList.itr f n x) 
  
+
 splitAt :: Nat -> [a] -> ([a], [a])
 -- splitAt n = (ExList.itr oneToL n) . ([], )
 
 --splitAt [] _         = ([], [])
-splitAt O xs         = ([], xs) 
+splitAt O xs       = ([], xs) 
 splitAt (S n) (xs) = let (ls, rs) = (splitAt n xs) 
                      in case rs of 
                           []      -> (ls, rs)
