@@ -194,9 +194,9 @@ all p = conjall . map p
 and = conjall
 or  = disists
 
-concat :: [a] -> [a] -> [a]
-concat xs []     = xs 
-concat xs (y:ys) = concat (xs <: y) ys 
+concat :: [[a]] -> [a]
+concat = fold (++) [] 
+
 
 elem :: Eq a => a -> [a] -> Bool 
 elem x = any (== x) 
@@ -346,7 +346,8 @@ put x (y:ys) (S n) = y:(put x ys n)
 
 -- Put EveryWhere
 putEw :: a -> [a] -> [[a]] -- aqui embaixo tbm daria pra usar o countdown
-putEw x ys = map (put x ys) [O .. (len ys)]
+putEw x ys = [put x ys n | n <- [O .. len ys]]
+--putEw x ys = map (put x ys) [O .. (len ys)]
             
 putInAll :: a -> [[a]] -> [[a]] 
 putInAll _ []           = [] 
@@ -359,12 +360,21 @@ putInAll x (xs:xss) = (put x xs O): case xss of
                                     (ys:yss) -> (put x ys (S O)) : case yss of 
                                                                    [] -> []
                                                                  (zs : zss) ...
--} 
+-}
+
+
+
 -- ainda nao esta funcionado :c
 pi :: [a] -> [[a]]
 pi []     = [[]]
-pi [x]    = [[x]] 
-pi (x:xs) = putInAll x (pi xs)  
+pi [x]    = [[x]]
+--pi  _  = undefined
+pi (x:xs) = concat [putEw x xs' | xs' <- pi xs]
+--pi (x:xs) = concat (map (putEw x) xs')
+--    where xs' = pi xs
+             
+--pi (x:xs) = concat $ map (putEw x) [xs] 
+
 
 --splitAt (xs'@(x:xs)) (S n) = let (ls, rs) = (x:thing,  
 
