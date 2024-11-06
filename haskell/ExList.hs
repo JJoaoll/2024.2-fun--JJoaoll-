@@ -410,7 +410,8 @@ pi (x:xs) = concat [putEw x xs' | xs' <- pi xs]
 -- unlines
 -- unwords
 
--- transpose
+transpose :: [[a]] -> [[a]] 
+transpose = undefined
 
 -- pi 
 
