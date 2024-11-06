@@ -310,7 +310,14 @@ isIn :: Eq a => a -> [a] -> Bool
 isIn x = disists . map (==x)
 
 
--- intercalate
+intercalate :: [a] -> [[a]] -> [a]
+-- intercalate xs (ys:yss@(_:_)) = ys ++ xs ++ (intercalate xs yss)
+-- intercalate _ yss = fold (++) [] yss 
+intercalate _ []        = []  
+intercalate _ [ys]      = ys 
+intercalate xs (ys:yss) = ys ++ xs ++ (intercalate xs yss)
+
+
 nub :: Eq a => [a] -> [a]
 nub []     = []
 nub (x:xs)   
