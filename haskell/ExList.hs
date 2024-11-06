@@ -306,8 +306,17 @@ zipWith _ _ []          = []
 zipWith f (x:xs) (y:ys) = (f x y):zipWith f xs ys
 -}
 
+isIn :: Eq a => a -> [a] -> Bool
+isIn x = disists . map (==x)
+
+
 -- intercalate
--- nub
+nub :: Eq a => [a] -> [a]
+nub []     = []
+nub (x:xs)   
+  | x `isIn` xs = nub xs
+  | otherwise   = x:nub xs
+
 
 oneToR :: ([a], [a]) -> ([a], [a])
 oneToR (xs, ys) = case xs of 
@@ -364,7 +373,6 @@ putInAll x (xs:xss) = (put x xs O): case xss of
 
 
 
--- ainda nao esta funcionado :c
 pi :: [a] -> [[a]]
 pi []     = [[]]
 pi [x]    = [[x]]
