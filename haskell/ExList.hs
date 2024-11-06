@@ -406,9 +406,8 @@ pi (x:xs) = concat [putEw x xs' | xs' <- pi xs]
 break :: (a -> Bool) -> [a] -> ([a], [a])
 break _ []     = ([], []) 
 break p (x:xs) 
-  | p x       = (ls,x:rs) 
-  | otherwise = (x:ls,rs)
-  where (ls,rs) = break p xs
+  | p x       = oneTo
+  | otherwise =
 
 splitBy :: (a -> Bool) -> [a] -> ([a], [a])
 splitBy _ []     = ([], []) 
