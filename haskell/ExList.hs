@@ -403,7 +403,20 @@ pi (x:xs) = concat [putEw x xs' | xs' <- pi xs]
 -- what is the problem with the following?:
 -- splitAt n xs  =  (take n xs, drop n xs)
 
--- break
+break :: (a -> Bool) -> [a] -> ([a], [a])
+break _ []     = ([], []) 
+break p (x:xs) 
+  | p x       = (ls,x:rs) 
+  | otherwise = (x:ls,rs)
+  where (ls,rs) = break p xs
+
+splitBy :: (a -> Bool) -> [a] -> ([a], [a])
+splitBy _ []     = ([], []) 
+splitBy p (x:xs) 
+  | p x       = (ls,x:rs) 
+  | otherwise = (x:ls,rs)
+  where (ls,rs) = splitBy p xs
+
 
 -- lines
 -- words
