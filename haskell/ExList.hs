@@ -324,6 +324,9 @@ nub (x:xs)
   | x `isIn` xs = nub xs
   | otherwise   = x:nub xs
 
+sings :: [a] -> [[a]] 
+sings [] = [] 
+sings (x:xs) = [x]:sings xs
 
 oneToR :: ([a], [a]) -> ([a], [a])
 oneToR (xs, ys) = case xs of 

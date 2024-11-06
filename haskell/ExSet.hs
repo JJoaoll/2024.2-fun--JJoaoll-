@@ -1,5 +1,5 @@
 module ExSet
-    ( Set
+   {- ( Set
     , empty
     , singleton
     , fromList
@@ -25,20 +25,25 @@ module ExSet
     , filter
     , partition
     , map
-    ) where
+    )-} where
 
 import qualified Data.List as L
-
-data Set a = Set [a]
+import ExList (isIn) 
+data Set a = (Eq, Show) a => Set [a]
 
 -- CAUTION: you may need to add constraints to your types and instances!
 
+areIn :: Eq a => [a] -> [a] -> Bool
+areIn [] ys     = True 
+areIn (x:xs) ys = (x `isIn` ys) && (xs `areIn` ys)
+
 instance Eq (Set a) where
-    xs == ys  = undefined
+    Set xs == Set ys = (xs `areIn` ys) && (ys `areIn` xs)
 
 instance Show (Set a) where
-    show xs = "{ please define show }"
-
+    show (Set [])     = "{}"
+    show (Set (x:xs)) = "{ " ++ show x ++ ", "++ show xs ++ " }"
+{-
 -- smart constructor
 set :: [a] -> Set a
 set = fromList
@@ -71,7 +76,7 @@ notMember :: Set a -> Bool
 notMember = undefined
 
 null :: Set a -> Bool
-null = 
+null = undefined 
 
 size :: Integral i => Set a -> i
 size = undefined
@@ -121,4 +126,4 @@ partition = undefined
 
 map :: (a -> b) -> Set a -> Set b
 map = undefined
-
+-}
