@@ -415,7 +415,11 @@ splitBy p (x:xs)
   | otherwise = (x:ls,rs)
   where (ls,rs) = splitBy p xs
 
+pairs :: [a] -> [(a, a)]
+pairs (x:xs'@(x':_)) = (x,x'):pairs xs'
+pairs _ = []
 
+pairsv2 = map (\(x,y) -> [x,y]) . pairs
 -- lines
 -- words
 -- unlines
