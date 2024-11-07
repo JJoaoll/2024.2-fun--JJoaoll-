@@ -259,13 +259,11 @@ isPrefixOf (x:xs) (y:ys) = (x == y) && isPrefixOf xs ys
 -- isInfixOf
 --
 
-{-
 isSuffixOf :: Eq a => [a] -> [a] -> Bool 
 isSuffixOf [] ys         = True 
 isSuffixOf xs []         = False 
-isSuffixOf (x:xs) ys = (x == (rear ys)) && isSuffixOf xs (cutRear ys) 
+isSuffixOf xs ys'@(y:ys) = xs == ys' || xs `isSuffixOf` ys 
 
--}
 
 {-
 rear :: [a] -> a 
@@ -425,8 +423,6 @@ splitBy p (x:xs)
 
 transpose :: [[a]] -> [[a]] 
 transpose = undefined
-
--- pi 
 
 -- checks if the letters of a phrase form a palindrome (see below for examples)
 palindrome :: String -> Bool
