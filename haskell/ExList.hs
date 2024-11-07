@@ -404,10 +404,11 @@ pi (x:xs) = concat [putEw x xs' | xs' <- pi xs]
 -- splitAt n xs  =  (take n xs, drop n xs)
 
 break :: (a -> Bool) -> [a] -> ([a], [a])
-break _ []     = ([], []) 
-break p (x:xs) 
-  | p x       = oneTo
-  | otherwise =
+break p xs'@(x:xs) 
+  | p x       = ([], xs') 
+  | otherwise = (x:ls,rs)
+  where (ls, rs) = break p xs
+break _ _     = ([], []) 
 
 splitBy :: (a -> Bool) -> [a] -> ([a], [a])
 splitBy _ []     = ([], []) 
