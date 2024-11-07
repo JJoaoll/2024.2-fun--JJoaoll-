@@ -46,10 +46,21 @@ eval (Neg t)      = negate (eval t)
 
 -- step should make only 1 step of calculation on a given ArEx
 step :: ArEx -> ArEx
-step (Atom t)     = Atom t 
-step (Plus t t')  = Atom (eval t + eval t')
-step (Times t t') = Atom () 
-step (Neg t)      = Atom (negate (eval t))
+step (Atom t)                  = Atom t 
+step (Plus t t') = case (t,t') of
+                   (Atom x, Atom y) -> Atom (x + y)
+          	   (Atom x, t')     -> Plus t (step t')
+		   (t, t')          -> Plus (step t) t'
+step (Times t t') = case (t,t') of
+                   (Atom x, Atom y) -> Atom (x *  y)
+          	   (Atom x, t')     -> Times t (step t')
+		   (t, t')          -> Times (step t) t'
+step (Neg t)      = case t of 
+                   (Atom x)         -> Atom (negate x)
+	           t                -> Neg (step t) 
+	      
+prettyStep :: ArEx -> String                   
+prettyStep t = pretty t ++ " = " ++ pretty (step t)
 
   
 

@@ -43,6 +43,10 @@ instance Enum Bool where
 True && True = True 
 _ && _       = False 
 
+and b1 b2 = case (b1, b2 of 
+            True True -> True 
+	    False _   -> False
+
 infixr 3 &&
 
 -- disjunction (OR)
