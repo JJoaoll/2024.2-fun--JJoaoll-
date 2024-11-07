@@ -6,8 +6,6 @@ data ArEx = Atom Integer
           | Neg ArEx
   deriving (Eq, Show)
 
-
-
 -- pretty printer
 pretty :: ArEx -> String
 pretty (Atom n) = show n
@@ -62,5 +60,11 @@ step (Neg t)      = case t of
 prettyStep :: ArEx -> String                   
 prettyStep t = pretty t ++ " = " ++ pretty (step t)
 
-  
+calcAux :: ArEx -> String 
+calcAux t@(Atom _) = pretty t 
+calcAux t = case t of 
+            (Atom x) -> pretty t
+	    _        -> pretty t ++ "\n= " ++ calcAux (step t)
+
+prettyCalc = putStrLn . calcAux   
 
