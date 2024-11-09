@@ -1,5 +1,5 @@
 
-# Functional Programming 2024.2, UFRN
+# Functional Programming 2024.2, UFRN 
 
 ### About
 The "FUN" stands for "Functional". So here's my personal study stuff in Functional Programming at **UFRN**.  

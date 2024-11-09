@@ -170,8 +170,19 @@ inits xs     = (inits (init xs)) <: xs
 stretch :: Nat -> [a] -> [a] 
 stretch _ []     = [] 
 stretch n (x:xs) = replicate n x ++ stretch n xs 
--- subsequences
 
+subsequences :: [a] -> [[a]]
+subsequences []         = [[]] 
+subsequences (x:xs) = pput x (subsequences xs)
+	where pput = \x yss -> case yss of
+                               []       -> []
+			       (ys:yss) -> ys:(x:ys):(pput x yss)
+   			 {-
+			 let yss = subsequences xs 
+                         in x `bb` yss
+	where x `bb` []     = []
+	      x `bb` (ys:yss) = ys:(x:ys):(x `bb` yss) 
+		-}		
 countdown :: Nat -> [Nat] 
 countdown O     = [O]
 countdown (S n) = S n : countdown n 

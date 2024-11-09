@@ -1,5 +1,5 @@
-module ExSet
-   {- ( Set
+module ExSet where {-
+    ( Set
     , empty
     , singleton
     , fromList
@@ -25,11 +25,15 @@ module ExSet
     , filter
     , partition
     , map
-    )-} where
+    ) where
+-}
+import Prelude hiding  (map) 
+import qualified Data.List as L 
+--import qualified Data.List as L (map) 
+import ExList (isIn)
+-- import ExList (isIn, nub, subsequences) 
 
-import qualified Data.List as L
-import ExList (isIn) 
-data Set a = (Eq, Show) a => Set [a]
+data Set a = (Eq a, Show a) =>  Set [a]
 
 -- CAUTION: you may need to add constraints to your types and instances!
 
@@ -37,34 +41,46 @@ areIn :: Eq a => [a] -> [a] -> Bool
 areIn [] ys     = True 
 areIn (x:xs) ys = (x `isIn` ys) && (xs `areIn` ys)
 
+
 instance Eq (Set a) where
     Set xs == Set ys = (xs `areIn` ys) && (ys `areIn` xs)
 
 instance Show (Set a) where
     show (Set [])     = "{}"
-    show (Set (x:xs)) = "{ " ++ show x ++ ", "++ show xs ++ " }"
-{-
+    show (Set xs'@(_:_)) = let printAll = \xs -> case xs of
+                                          []           -> " "
+					  [x]          -> show x 
+					  (x:xs@(_:_)) -> (show x) ++ ", " ++ printAll xs
+                           in "{" ++ printAll (L.nub xs') ++ "}"
+
+
 -- smart constructor
-set :: [a] -> Set a
-set = fromList
 
-empty :: Set a -> Bool
-empty = undefined
+set :: (Eq a, Show a) => [a] -> Set a 
+set = Set . L.nub
+--set xs = Set xs
 
-singleton :: a -> Set a
-singleton = undefined
+isEmpty :: Set a -> Bool
+isEmpty (Set []) = True
+isEmpty _        = False
 
-fromList :: [a] -> Set a
-fromList = undefined
+empty :: (Eq a, Show a) => Set a 
+empty = Set [] 
+
+singleton :: (Eq a, Show a) => a -> Set a
+singleton = Set . (:[])
+
+fromList :: (Eq a, Show a) => [a] -> Set a
+fromList = set 
 
 toList :: Set a -> [a]
-toList = undefined
+toList (Set xs) = xs
 
-powerSet :: Set a -> Set (Set a)
-powerSet = undefined
+powerSet :: (Eq a, Show a) => Set a -> Set (Set a)
+powerSet = set . (L.map set) . L.subsequences . toList 
 
-insert :: a -> Set a -> Set a
-insert = undefined
+insert :: (Eq a, Show a) => a -> Set a -> Set a
+insert x = set . (x :) . toList  
 
 delete :: a -> Set a -> Set a
 delete = undefined
@@ -126,4 +142,4 @@ partition = undefined
 
 map :: (a -> b) -> Set a -> Set b
 map = undefined
--}
+
