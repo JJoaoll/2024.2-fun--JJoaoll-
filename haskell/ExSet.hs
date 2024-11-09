@@ -82,8 +82,11 @@ powerSet = set . (L.map set) . L.subsequences . toList
 insert :: (Eq a, Show a) => a -> Set a -> Set a
 insert x = set . (x :) . toList  
 
-delete :: a -> Set a -> Set a
-delete = undefined
+delete :: (Eq a, Show a) => a -> Set a -> Set a
+delete x = fromList . L.filter (not . (==x)) . toList 
+
+without :: (Eq a, Show a) => Set a -> a -> Set a
+without = flip delete
 
 member :: a -> Set a -> Bool
 member = undefined
