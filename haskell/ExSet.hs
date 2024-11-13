@@ -120,8 +120,7 @@ isDisjointWith :: (Eq a, Show a) => Set a -> Set a -> Bool
 isDisjointWith = disjoint
 
 pairwiseDisjoint :: Set (Set a) -> Bool
-pairwiseDisjoint (Set xs) = conj bs 
-	where bs = [x `isDisWithAll` ys| x <- xs]
+pairwiseDisjoint (Set xss) = undefined 
 
 union :: (Eq a, Show a) => Set a -> Set a -> Set a
 union s s' = set $ (toList s) ++ (toList s')
@@ -131,23 +130,28 @@ inter s s' = set [x | x <- (toList s), x `isMemberOf` s']
 -- escrever com map e filter dos sets!
 
 -- relative complement (set difference)
-setminus :: Set a -> Set a -> Set a
-setminus = undefined
+setMinus :: Set a -> Set a -> Set a
+setMinus (Set xs) s' = Set [x | x <- xs, x `isNotMemberOf` s'] 
+-- trust ur Smart Constructor
 
-(\\) = setminus
+(\\) = setMinus
 infixr 5 \\
 
-unions :: Set (Set a) -> Set a
-unions = undefined
+bigUnion :: Set (Set a) -> Set a
+bigUnion = undefined
 
-inters :: Set (Set a) -> Set a
-inters = undefined
+bigInter :: Set (Set a) -> Set a
+bigInter = undefined
 
 cartesianProduct :: Set a -> Set b -> Set (a, b)
-cartesianProduct = undefined
+cartesianProduct (Set xs) (Set ys)  = Set [(x,y) | x <- xs, y <- ys]
+-- como traduzir essa virgula em L.map's?
 
-disjointUnion :: Set a -> Set b -> Set (Either a b)
-disjointUnion = undefined
+--cartesianSum :: (Eq a, Eq b) => Set a -> Set b -> Set ((Char, Either a b))
+cartesianSum :: (Eq a, Eq b, Show a, Show b) => Set a -> Set b -> Set (Either a b)
+cartesianSum s s' = lefts s `union` rights s'
+	where lefts  = map (Left)
+	      rights = map (Right)
 
 filter :: (a -> Bool) -> Set a -> Set a
 filter p (Set xs) = Set (L.filter p xs)  
