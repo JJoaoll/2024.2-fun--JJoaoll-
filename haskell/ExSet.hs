@@ -87,36 +87,48 @@ delete x = fromList . L.filter (not . (==x)) . toList
 
 without :: (Eq a, Show a) => Set a -> a -> Set a
 without = flip delete
+-- is very useful for typing 
+-- X `without` x 
 
-member :: a -> Set a -> Bool
-member = undefined
+isMemberOf :: (Eq a, Show a) => a -> Set a -> Bool
+isMemberOf x = (x `isIn`) . toList
 
-notMember :: Set a -> Bool
-notMember = undefined
+-- 
+isNotMemberOf :: (Eq a, Show a) => a -> Set a -> Bool
+isNotMemberOf = curry (not . uncurry (isMemberOf)) 
 
-null :: Set a -> Bool
-null = undefined 
+null ::(Eq a, Show a) => Set a -> Bool
+null = (== empty) 
 
 size :: Integral i => Set a -> i
-size = undefined
+size (Set [])       = 0
+size s@(Set (x:xs)) = 1 + size (s `without` x) 
 
 isSubsetOf :: Set a -> Set a -> Bool
-isSubsetOf = undefined
+isSubsetOf (Set xs) (Set ys) = xs `areIn` ys
 
-isProperSubsetOf :: Set a -> Set a -> Bool
-isProperSubsetOf = undefined
+x != y = not (x == y)
 
-disjoint :: Set a -> Set a -> Bool
-disjoint = undefined
+isProperSubsetOf ::(Eq a, Show a) => Set a -> Set a -> Bool
+isProperSubsetOf s s' = (s `isSubsetOf` s') && (s != s') 
+-- nomes bons?
+
+disjoint :: (Eq a, Show a) => Set a -> Set a -> Bool
+disjoint s s' = (inter s s') == empty 
+
+isDisjointWith :: (Eq a, Show a) => Set a -> Set a -> Bool
+isDisjointWith = disjoint
 
 pairwiseDisjoint :: Set (Set a) -> Bool
-pairwiseDisjoint = undefined
+pairwiseDisjoint (Set xs) = conj bs 
+	where bs = [x `isDisWithAll` ys| x <- xs]
 
-union :: Set a -> Set a -> Set a
-union = undefined
+union :: (Eq a, Show a) => Set a -> Set a -> Set a
+union s s' = set $ (toList s) ++ (toList s')
 
-inter :: Set a -> Set a -> Set a
-inter = undefined
+inter :: (Eq a, Show a) => Set a -> Set a -> Set a
+inter s s' = set [x | x <- (toList s), x `isMemberOf` s']  
+-- escrever com map e filter dos sets!
 
 -- relative complement (set difference)
 setminus :: Set a -> Set a -> Set a
@@ -138,11 +150,12 @@ disjointUnion :: Set a -> Set b -> Set (Either a b)
 disjointUnion = undefined
 
 filter :: (a -> Bool) -> Set a -> Set a
-filter = undefined
+filter p (Set xs) = Set (L.filter p xs)  
 
+-- que nome estranho
 partition :: (a -> Bool) -> Set a -> (Set a, Set a)
 partition = undefined
 
-map :: (a -> b) -> Set a -> Set b
-map = undefined
+map :: (Eq a, Show a, Eq b, Show b) => (a -> b) -> Set a -> Set b
+map f = set . (L.map f) . toList 
 
