@@ -445,14 +445,16 @@ pairsv2 = map (\(x,y) -> [x,y]) . pairs
 
 separeBy :: (Eq a) => (a -> Bool) -> [a] -> [[a]]
 separeBy _ []     = []
--- melhorar essa def
-separeBy p (x:xs) = case (separeBy p xs) of 
-                    []            -> if p x then [] else [[x]]
-                    yss'@(ys:yss) -> 
-                      if   p x 
-                        -- [x]:yss'
-                      then []:yss'
-                      else (x:ys):yss
+separeBy p (x:xs) =
+  case (separeBy p xs) of 
+
+       [] ->
+         if p x then []
+	        else [[x]]
+
+       yss'@(ys:yss) -> 
+         if p x then [] : yss' 
+	        else (x : ys) : yss
 
 -- lines
 
