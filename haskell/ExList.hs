@@ -455,8 +455,13 @@ separeBy p (x:xs) = case (separeBy p xs) of
                       else (x:ys):yss
 
 -- lines
+
+-- nome bom de Angelo:
+splitWhenFind :: (Eq a) => a -> [a] -> [[a]]
+splitWhenFind x = separeBy (== x)
+
 words :: String  -> [String]
-words =  separeBy (== ' ')  . filter (not . C.isControl)
+words =  splitWhenFind ' ' . filter (not . C.isControl)
 
 -- unlines
 -- unwords
