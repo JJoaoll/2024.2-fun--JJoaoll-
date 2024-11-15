@@ -124,6 +124,17 @@ dropWhile f (x:xs) = if f x
                      then dropWhile f xs 
                      else x:xs
 
+sorted :: Ord a => [a] -> Bool
+sorted []         = True 
+sorted xs'@(_:xs) = conjall (L.zipWith (<=) xs' xs)
+
+--filter usandao concat
+-- deve funfar se usar mapMaybe seguida de 
+-- toList. 
+
+
+
+
 -- ASSUMPTION: xs and yes are sorted
 merge :: Ord a => [a] -> [a] -> [a]
 merge xs []                 = xs
@@ -174,15 +185,15 @@ stretch n (x:xs) = replicate n x ++ stretch n xs
 subsequences :: [a] -> [[a]]
 subsequences []         = [[]] 
 subsequences (x:xs) = pput x (subsequences xs)
-	where pput = \x yss -> case yss of
+                where pput = \x yss -> case yss of
                                []       -> []
-			       (ys:yss) -> ys:(x:ys):(pput x yss)
-   			 {-
+                               (ys:yss) -> ys:(x:ys):(pput x yss)
+{-
 			 let yss = subsequences xs 
                          in x `bb` yss
 	where x `bb` []     = []
 	      x `bb` (ys:yss) = ys:(x:ys):(x `bb` yss) 
-		-}		
+-}
 countdown :: Nat -> [Nat] 
 countdown O     = [O]
 countdown (S n) = S n : countdown n 
@@ -431,10 +442,30 @@ pairs (x:xs'@(x':_)) = (x,x'):pairs xs'
 pairs _ = []
 
 pairsv2 = map (\(x,y) -> [x,y]) . pairs
+
+separeBy :: (Eq a) => (a -> Bool) -> [a] -> [[a]]
+separeBy _ []     = []
+-- melhorar essa def
+separeBy p (x:xs) = case (separeBy p xs) of 
+                    []            -> if p x then [] else [[x]]
+                    yss'@(ys:yss) -> 
+                      if   p x 
+                        -- [x]:yss'
+                      then []:yss'
+                      else (x:ys):yss
+
 -- lines
--- words
+words :: String  -> [String]
+words =  separeBy (== ' ')  . filter (not . C.isControl)
+
 -- unlines
 -- unwords
+
+type Text = String
+type Word = String
+--commonWords :: Int -> Text -> String
+--commonWords n = concat  .  showRun  . take n  . countRuns  . sortWords  .  words  .  (map C.toLower)
+
 
 transpose :: [[a]] -> [[a]] 
 transpose = undefined
