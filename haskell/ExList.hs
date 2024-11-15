@@ -219,6 +219,11 @@ or  = disists
 concat :: [[a]] -> [a]
 concat = fold (++) [] 
 
+concatWith :: a -> [[a]] -> [a]
+concatWith x = fold (putInTheMiddle x) []
+  where putInTheMiddle x xs xs' = case xs' of
+                                  []     -> xs
+                                  (_:_)  -> xs ++ [x] ++ xs' 
 
 elem :: Eq a => a -> [a] -> Bool 
 elem x = any (== x) 
@@ -231,7 +236,7 @@ elem2 x (y:ys) =
   False -> elem2 x ys 
 -- (without using other functions except (==))
 
-
+-- isso ta bugado
 (!!) :: [a] -> Nat -> a 
 xs !! O         = case head xs of    
                   P.Just x -> x 
@@ -443,43 +448,51 @@ pairs _ = []
 
 pairsv2 = map (\(x,y) -> [x,y]) . pairs
 
-separeBy :: (Eq a) => (a -> Bool) -> [a] -> [[a]]
-separeBy _ []     = []
-separeBy p (x:xs) =
-  case (separeBy p xs) of 
+separateBy :: (Eq a) => (a -> Bool) -> [a] -> [[a]]
+separateBy _ []     = []
+separateBy p (x:xs) =
+  case (separateBy p xs) of 
 
        [] ->
          if p x then []
-	        else [[x]]
+                else [[x]]
 
        yss'@(ys:yss) -> 
          if p x then [] : yss' 
-	        else (x : ys) : yss
+                else (x : ys) : yss
 
--- lines
+lines :: String -> [String]
+lines = splitWhereFind '\n'
 
--- nome bom de Angelo:
-splitWhenFind :: (Eq a) => a -> [a] -> [[a]]
-splitWhenFind x = separeBy (== x)
+splitWhereFind :: (Eq a) => a -> [a] -> [[a]]
+splitWhereFind x = separateBy (== x)
 
 words :: String  -> [String]
-words =  splitWhenFind ' ' . filter (not . C.isControl)
+words = splitWhereFind ' ' . filter (not . C.isControl)
 
--- unlines
--- unwords
+-- as duas funcoes abaixo nem merecem esses nomes
+unlines :: [String] -> String
+unlines = concat . map (++ "\n")
+
+unwords :: [String] -> String
+unwords = concatWith ' '
 
 type Text = String
 type Word = String
 --commonWords :: Int -> Text -> String
 --commonWords n = concat  .  showRun  . take n  . countRuns  . sortWords  .  words  .  (map C.toLower)
 
-
 transpose :: [[a]] -> [[a]] 
 transpose = undefined
 
 -- checks if the letters of a phrase form a palindrome (see below for examples)
+
+padronize :: String -> String 
+padronize = filter C.isLetter . map C.toLower
+
 palindrome :: String -> Bool
-palindrome = undefined
+palindrome str = str' == reverse str'
+  where str' = padronize str
 
 {-
 
