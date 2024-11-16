@@ -479,9 +479,10 @@ unwords = concatWith ' '
 
 type Text = String
 type Word = String
---commonWords :: Int -> Text -> String
---commonWords n = concat  .  showRun  . take n  . countRuns  . sortWords  .  words  .  (map C.toLower)
-
+commonWords :: Int -> Text -> String
+commonWords n = concat  .  showRun  . take n  . countRuns  . sortWords  .  words  .  (map C.toLower)
+ where sortWords = mSort 
+       countRuns = toHashCount 
 
 -- note que ate da pra definir a sings em termos desta
 putAllIn :: [a] -> [[a]] -> [[a]]
