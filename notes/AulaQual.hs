@@ -1,3 +1,5 @@
+module AulaQual where 
+
 data Unit = O 
 
 instance (Show Unit) where
@@ -14,14 +16,9 @@ haha = error "haha"
 test :: Empty -> String 
 test _ = "hehe" 
  
-test2 :: Empty -> String 
+-- test2 :: Empty -> String 
 
 data Box a = Box a
-
-o :: Empty -> Nat 
-so :: Box Empty -> Nat 
-sso :: Box (Box Empty) -> Nat
-ssso :: Box (Box (Box Empty))-> Nat
 
 -- Algumas perguntas:
 -- site haskell em loop 
@@ -29,19 +26,19 @@ ssso :: Box (Box (Box Empty))-> Nat
 -- so par corretude?
 
 data M a where
-  N : M a
-  J : a -> M a 
+  N :: M a
+  J :: a -> M a 
 
 data True  = True 
 data False = False
 
 data Result a where 
-  Okay  : a      -> Result a
-  Error : String -> Result a 
+  Okay  :: a      -> Result a
+  Error :: String -> Result a 
 
 data ThenElse a b where 
-  Then : a -> ThenElse a b
-  Else : b -> ThenElse a b 
+  Then :: a -> ThenElse a b
+  Else :: b -> ThenElse a b 
 
 
 
