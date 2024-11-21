@@ -479,10 +479,29 @@ unwords = concatWith ' '
 
 type Text = String
 type Word = String
-commonWords :: Int -> Text -> String
-commonWords n = concat  .  showRun  . take n  . countRuns  . sortWords  .  words  .  (map C.toLower)
- where sortWords = mSort 
-       countRuns = toHashCount 
+
+(!=) :: Eq a => a -> a -> Bool
+x != x' = not (x == x') 
+
+removeAll :: Eq a => a -> [a] -> [a] 
+removeAll x = filter (!=x) 
+
+count :: Eq a => a -> [a] -> Nat 
+count x []     = 0
+count x (y:ys) 
+  | x == y    = S ys' 
+  | otherwise = ys' 
+  where ys' = count x ys
+
+toHashByCount :: Eq a => [a] -> [(a,Nat)]
+toHashByCount []     = [] 
+toHashByCount (x:xs) = (x, c) : toHashByCount xs'
+  where c   = S (count x xs)
+        xs' = removeAll x xs 
+
+--commonWords n = concat  .  showRun  . take n  . countRuns  . sortWords  .  words  .  (map C.toLower)
+-- where sortWords = mSort 
+--       countRuns = toHashCount 
 
 -- note que ate da pra definir a sings em termos desta
 putAllIn :: [a] -> [[a]] -> [[a]]
@@ -490,7 +509,6 @@ putAllIn [] yss          = yss
 putAllIn (x:xs) yss      = (x : ys) : putAllIn xs yss' 
   where ys   = concat (take 1 yss)
         yss' = drop 1 yss 
-
 
 transpose :: [[a]] -> [[a]] 
 transpose []       = [] 
