@@ -132,9 +132,6 @@ sorted xs'@(_:xs) = conjall (L.zipWith (<=) xs' xs)
 -- deve funfar se usar mapMaybe seguida de 
 -- toList. 
 
-
-
-
 -- ASSUMPTION: xs and yes are sorted
 merge :: Ord a => [a] -> [a] -> [a]
 merge xs []                 = xs
@@ -176,9 +173,19 @@ init (x:xs) = x : init xs
 
 inits :: [a] -> [[a]]
 inits []     = [[]] 
-inits xs     = (inits (init xs)) <: xs 
+inits xs     = (inits (init xs)) <: xs
 
-stretch :: Nat -> [a] -> [a] 
+segments :: Eq a => [a] -> [[a]]
+segments = nub . concat  . map inits . tails
+
+ssum :: Num a => [a] -> a
+ssum = fold (+) 0
+
+highestSegmentSum :: (Num a, Eq a, Ord a) => [a] -> a
+highestSegmentSum = maximum . map ssum . segments
+
+
+stretch :: Nat -> [a] -> [a]
 stretch _ []     = [] 
 stretch n (x:xs) = replicate n x ++ stretch n xs 
 
