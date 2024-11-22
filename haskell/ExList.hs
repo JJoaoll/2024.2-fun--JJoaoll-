@@ -117,7 +117,6 @@ takeWhile f (x:xs) = if f x
                      then x : takeWhile f xs 
                      else []
 
-
 dropWhile :: (a -> Bool) -> [a] -> [a]
 dropWhile _ []     = [] 
 dropWhile f (x:xs) = if f x 
@@ -136,7 +135,7 @@ sorted xs'@(_:xs) = conjall (L.zipWith (<=) xs' xs)
 merge :: Ord a => [a] -> [a] -> [a]
 merge xs []                 = xs
 merge [] ys                 = ys
-merge (xs'@(x:xs)) (ys'@(y:ys)) 
+merge xs'@(x:xs) ys'@(y:ys) 
   | x <= y = x:merge xs ys'
   | y < x  = y:merge xs' ys
 
@@ -173,7 +172,7 @@ init (x:xs) = x : init xs
 
 inits :: [a] -> [[a]]
 inits []     = [[]] 
-inits xs     = (inits (init xs)) <: xs
+inits xs     = inits (init xs) <: xs
 
 segments :: Eq a => [a] -> [[a]]
 segments = nub . concat  . map inits . tails
@@ -290,8 +289,11 @@ isPrefixOf :: Eq a => [a] -> [a] -> Bool
 isPrefixOf [] ys         = True 
 isPrefixOf xs []         = False 
 isPrefixOf (x:xs) (y:ys) = (x == y) && isPrefixOf xs ys 
--- isInfixOf
---
+
+isInfixOf :: Eq a => [a] -> [a] -> Bool
+xs `isInfixOf` ys = xs `isIn` segments ys
+
+
 
 isSuffixOf :: Eq a => [a] -> [a] -> Bool 
 isSuffixOf [] ys         = True 
@@ -330,7 +332,7 @@ mcurry f a b = f (a,b)
 --zipWithCurried f = map (uncurry f) . (mcurry zip)
 
 zipWithLegal :: (a -> b -> c) -> [a] -> [b] -> [c] 
-zipWithLegal f xs = map (uncurry f) . (zip xs) 
+zipWithLegal f xs = map (uncurry f) . zip xs 
 
 zipWith :: (a -> b -> c) -> [a] -> [b] -> [c] 
 zipWith _ [] _          = [] 
