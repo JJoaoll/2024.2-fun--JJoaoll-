@@ -1,0 +1,281 @@
+take n xs ++ drop n xs = xs 
+-- ⊢ (∀xs : List α)(∀n : Nat)[take n xs ++ drop n xs = xs]
+Sejam xs : List α, n : Nat. 
+Caso n = O: 
+Calculamos: -- ⊢ take O xs ++ drop O xs = xs  
+  take O xs ++ drop O xs 
+= [] ++ drop O xs [take.2]
+= drop O xs       [(++).1 xs:= drop O xs]
+= xs.             [drop.2 xs:= xs]
+
+Caso n = S k: 
+  Indução no xs.
+
+  Caso xs = []: -- ⊢ take n [] ++ drop n [] = []  
+    Calculamos: 
+      take n [] ++ drop n [] 
+    = [] ++ drop n [] [take.1]
+    = drop n []       [(++).1 xs:= drop n [])
+    = [].             [drop.1] 
+
+  Caso xs = q::qs: 
+  -- ⊢ take n (q::qs) ++ drop n (q::qs) = q::qs
+    Calculamos: 
+      take (S k) (q::qs) ++ drop (S k) (q::qs)
+    = q::take k qs ++ drop (S k) (q::qs)  [take.3 n:= k x:= q xs:= qs]
+    = q::take k qs ++ drop k qs           [drop.3 n:= k xs:= qs]
+    = q::(take k qs ++ drop k qs)         [Lemma 1]
+    = q::qs.                              [h.i.]
+    
+
+Lemma 1: -- Cons x . (_ ++ ys) = (_ ++ ys) . Cons x 
+-- ⊢ ∀x,xs,ys, x::(xs ++ ys) = x::xs + ys
+Sejam x : α, xs,ys : List α. 
+Caso ys = []: -- ⊢  x::(xs ++ []) = x::xs ++ [] 
+  Calculamos: 
+    x::(xs ++ [])
+  = x::xs
+  = (x::xs) ++ [].
+
+Caso ys = k::ks: 
+--  x::(xs ++ ks) = x::xs ++ ks
+-- ⊢ x::(xs ++ k::ks) = x::xs ++ k::ks 
+  Calculamos: 
+    x::(xs ++ k::ks)
+  = x::((xs<:k) ++ ks). 
+
+  Caso x = []: 
+-- ⊢ x::([] ++ k::ks) = x::[] ++ k::ks 
+    Calculamos: 
+      x::(([]<:k) ++ ks)
+    = x::(([k]) ++ ks)
+
+    trivial. 
+
+  Caso x = q::qs:
+--  x::(qs ++ k::ks) = x::qs ++ k::ks 
+-- ⊢ x::(q::qs ++ k::ks) = x::q::qs ++ k::ks 
+    Calculamos: 
+      x::(q::qs ++ k::ks)
+    = x::((q::qs)<:k ++ ks)
+    = x::(q::(qs<:k) ++ ks) 
+    = 
+    
+------------------------------------------------- 
+
+take m . drop n = drop n . take (m + n)
+--(∀n, m : Nat)(∀xs : List α) 
+--[(take m . drop n) xs = (drop n . take (m + n)) xs]
+
+Sejam n, m : Nat.
+Inducao no n. 
+
+Caso n = O: 
+-- ⊢(∀xs : List α) 
+--[(take m . drop O) xs = (drop O . take (m + O)) xs]
+
+  Seja xs : List α.
+  Calculamos: 
+    (take m . drop O) xs 
+    = take m (drop O xs) [(.)]
+    = take m xs.         [drop.2]
+    
+    (drop O . take (m + O)) xs 
+    = drop O (take (m + O) xs) [(.)]
+    = take (m + O) xs          [drop.2] 
+    = take m xs.               [(+).1]
+
+Caso n = S k:
+-- (∀xs : List α) 
+-- [(take m . drop k) xs = (drop k . take (m + k)) xs]
+-- ⊢ (∀xs : List α) 
+-- [(take m . drop (S k)) xs = (drop (S k) . take (m + (S k))) xs]
+
+  Seja xs' : List α. 
+  Caso xs' = []: 
+
+    Calculamos:
+     (take m . drop n) []  
+     = take m (drop n []) [(.)]
+     = take m []          [drop.2]
+     = []. 
+
+     (drop n . take (m + n)) []  
+     = drop n (take (m + n) []) [(.)]
+     = drop n []                [take.2]
+     = [].                      [drop.2]
+
+  Caso xs' = x :: xs:
+  
+    Calculamos:
+      (take m . drop (S k)) x :: xs 
+      = take m (drop (S k) (x :: xs))  [(.)] 
+      = take m (drop k xs)             [drop.1] 
+      = (take m . drop k) xs           [<- (.)] 
+      = (drop k . take (m + k)) xs     [(HI) xs]  
+      = drop k (take (m + k) xs).      [(.)]
+      
+      (drop (S k) . take (m + (S k))) (x :: xs)   
+      = (drop (S k) . take $ S (m + k)) (x :: xs) [(+).2]
+      = drop (S k) (take (S (m + k)) (x :: xs))   [(.)]
+      = drop (S k) (x :: take (m + k) xs)         [take.1]
+      = drop k (take (m + k) xs).                 [drop.1]
+
+
+-- drop m . drop n  = drop (n + m)
+-- (∀n, m : Nat)(∀xs : List α)[(drop m . drop n) xs = drop (m + n) xs]
+
+Sejam n, m : Nat. 
+
+-- ⊢ (∀xs : List α)[(drop m . drop n) xs = drop (m + n) xs]
+Inducao no n. 
+
+Caso n = O: 
+-- ⊢ (∀xs : List α)[(drop m . drop O) xs = drop (m + O) xs]
+  Seja xs : List α. 
+  Calculamos: 
+    (drop m . drop O) xs
+    = drop m (drop O xs) [ (.).1]
+    = drop m xs          [drop.2]
+    = drop (m + O) xs.   [ (+).1]
+
+Caso n = S k: 
+--  (∀xs : List α)(drop m . drop k) xs = drop (m + k) xs] (HI)
+-- ⊢ (∀xs : List α)[(drop m . drop (S k)) xs = drop (m + (S k)) xs]
+
+  Seja xs' : List α.
+  Caso xs' = []: 
+    -- ⊢ (drop m . drop n) [] = drop (m + n) []
+    Calculamos: 
+      (drop m . drop n) [] 
+      = drop m (drop n []) [ (.).1]
+      = drop m []          [drop.2]
+      = [].                [drop.2]
+
+     drop (m + n) []
+     = [].                [drop.2]
+
+  Caso xs' = x :: xs:
+    -- ⊢ (drop m . drop n) (x :: xs) = drop (m + n) (x :: xs)
+
+    Calculamos: 
+      (drop m . drop (S k)) (x :: xs) 
+      = drop m (drop (S k) (x :: xs)) [ (.).1]
+      = drop m (drop k xs)            [drop.1]
+      = (drop m . drop k) xs.         [ (.).1]
+      = drop (m + k) = xs.            [ HI xs]
+
+      drop (m + (S k)) (x :: xs)
+      = drop (S (m + k)) (x :: xs)    [ (+).2]
+      = drop (m + k) xs.              [drop.1]
+  
+-------------------------------------------------------------
+-- take m . take n = take $ min (m, n)
+-- (∀n, m: Nat)(∀xs : List α)[(take m . take n) xs = take (min (m, n)) xs]
+
+Inducao.
+
+Base:  
+  -- ⊢ (∀m: Nat)(∀xs : List α)[(take m . take O) xs = take (min (m, O)) xs]
+  Sejam m : Nat, xs : List α. 
+  Calculamos:
+    (take m . take O) xs  
+    = take m (take O xs) [ (.).1]
+    = take m []          [take.2] 
+    = [].                [take.2]
+
+    take (min (m, O)) xs 
+    = take O xs          [ min.1] 
+    = [].                [take.2]
+
+Passo Indutivo: 
+  -- (∀m: Nat)(∀xs : List α)[(take m . take k) xs = take (min (m, k)) xs] (HI) 
+  -- ⊢ (∀m: Nat)(∀xs : List α)[(take m . take (S k)) xs = take (min (m, (S k))) xs]
+  Sejam m : Nat, xs' : List α. 
+  Caso m = O:
+    -- ⊢ (take O . take (S k)) xs' = take (min (O, (S k))) xs'
+    Calculamos: 
+      (take O . take (S k)) xs'  
+      = take O (take (S k)) xs' [ (.).1]
+      = [].                     [take.2] 
+
+      take (min (O, (S k))) xs' 
+      = take O xs'              [ min.2]
+      = [].                     [take.2]
+
+  Caso m = S q: 
+    -- ⊢ (take (S q) . take (S k)) xs' = take (min ((S q), (S k))) xs'
+    Caso xs' = []:
+      -- ⊢ (take (S q) . take (S k)) [] = take (min ((S q), (S k))) []
+      Calculamos:
+        (take (S q) . take (S k)) [] 
+        = take (S q) (take (S k) []) [ (.).1] 
+        = take (S q) []              [take.2]
+        = [].                        [take.2] 
+
+        take (min ((S q), (S k))) []
+        = [].                        [take.2] 
+
+    Caso xs' = x :: xs: 
+      -- ⊢ (take (S q) . take (S k)) (x :: xs) = take (min ((S q), (S k))) (x :: xs)
+      Calculamos: 
+        (take (S q) . take (S k)) (x :: xs) 
+        = take (S q) (take (S k) (x :: xs)) [   (.).1 ]
+        = take (S q) (x :: take k xs)       [  take.1 ]  
+        = x :: take q (take k xs)           [  take.1 ]
+        = x :: (take q . take k) xs         [   (.).1 ]
+        = x :: take (min (q, k)) xs.        [(HI) q xs]
+
+                 
+        take (min ((S q), (S k))) (x :: xs)
+        = take (S (min (q, k))) (x :: xs)   [   min.3 ]
+        = x :: take (min (q, k)) xs.        [  take.1 ] 
+        
+----------------------------------------------------
+
+map g . map f = map (g . f) 
+-- ⊢ (∀xs : List α)(∀f : α → β)(∀g : β → γ)
+-- [(map g . map f) xs = map (g . f) xs] 
+Sejam xs' : List α.
+Sejam f : α → β, g : β → γ. 
+
+Caso xs' = []: 
+  Calculamos:
+    (map g . map f) [] 
+    = map g (map f []) [(.).1 g:= map g; f:= map f]
+    = map g []         [map.1]
+    = [].              [map.1]
+
+    map (g . f) [] 
+    = [].              [map.1] 
+
+Caso xs' = x :: xs: 
+  -- (map g . map f) xs  = map (g . f) xs (HI)
+  -- ⊢ (map g . map f) (x :: xs)  = map (g . f) (x :: xs)  
+  Calculamos: 
+    (map g . map f) (x :: xs)
+    = map g (map f (x : xs))        [(.).1 g:= map g     ; f:= map f]
+    = map g ((f x) :: map f xs)     [map.2 f:= f; x:= x  ; xs:= xs]
+    = g (f x) :: map g (map f xs)   [map.2 f:= g; x:= f x; xs:= map f xs]
+    = g (f x) :: (map g . map f) xs [(.).1 g:= map g     ; f:= map f] 
+    = g (f x) :: map (g . f) xs.    [(HI)]
+
+    = map (g . f) (x :: xs)
+    = (g . f) x :: map (g . f) xs.  [map.2 f:= g . f; x:= x; xs:= xs]
+    = g (f x) :: map (g . f) xs.    [(.).1 g:= g    ; f:= f]
+
+     
+
+
+
+
+
+      
+
+
+
+
+
+
+
+    
