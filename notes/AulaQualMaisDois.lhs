@@ -1,5 +1,4 @@
-
-continuiando dos Either e Functors e etc.. 
+Continuando alguma coisa (essa linha foi perdida no tempo)
 
 > class Functor f where 
 >    fmap :: (a -> b) -> (f a -> f b)
@@ -16,11 +15,24 @@ Pair type no mundo dos valores:
 	    (x, y) :: (a, b)  
 
 Se roubassem nosso "(,)":
+
 > data Pair a b where
->     Pair :: a -> b -> Pair a b
+>   Pair :: a -> b -> Pair a b
 
 
 sintaxe bunitinha pra structs
+
+esse vai precisar pra sintaxe nova
+
+> data Date = Date { day  :: Nat 
+>                   ,mon  :: Nat 
+>                   ,year :: Nat 
+>                  }
+>  deriving (Show, Eq)
+
+> data Nat = O | S Nat 
+>  deriving (Show, Eq)
+
 > data Customer = Customer { name  :: String
 >                           ,email :: String 
 >                           , id   :: Nat 
@@ -45,8 +57,8 @@ f   = fst . h
 g   = snd . h
 
 ideia minha de map geral:
-> -- ? gMap :: Functor f => [a -> b] -> (f a -> f b)
->-- lgMap :: [a -> b] -> ([a] -> [b])
+ ? gMap :: Functor f => [a -> b] -> (f a -> f b)
+ lgMap :: [a -> b] -> ([a] -> [b])
 
 <uns exemplos de produtos onde temos mdc e intersec como uns
   exemplos bem especiais>
