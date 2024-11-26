@@ -110,6 +110,22 @@ drop _ []         = []
 drop O xs         = xs 
 drop (S n) (_:xs) = drop n xs 
 
+foldl :: (a -> b -> b) -> b -> [a] -> b 
+foldl _ e []      = e 
+foldl op e (x:xs) = x `op` foldl op e xs 
+
+foldr :: (b -> a -> b) -> b -> [a] -> b
+foldr _ e []      = e 
+foldr op e (x:xs) = foldr op e xs `op` x 
+
+scanl :: (b -> a -> b) -> b -> [a] -> b 
+scanl _ e []         = [e] 
+scanl op e [x]       = e : (e `op` x) : [] 
+scanl op e (x:x':xs) = 
+
+scanr :: (b -> a -> b) -> b -> [a] -> b
+scanr _ e []      = e 
+scanr op e (x:xs) = scanr op e xs `op` x 
 
 takeWhile :: (a -> Bool) -> [a] -> [a]
 takewhile _ []     = [] 
@@ -182,7 +198,6 @@ ssum = fold (+) 0
 
 highestSegmentSum :: (Num a, Eq a, Ord a) => [a] -> a
 highestSegmentSum = maximum . map ssum . segments
-
 
 stretch :: Nat -> [a] -> [a]
 stretch _ []     = [] 
