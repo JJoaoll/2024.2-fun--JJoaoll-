@@ -118,14 +118,15 @@ foldr :: (b -> a -> b) -> b -> [a] -> b
 foldr _ e []      = e 
 foldr op e (x:xs) = foldr op e xs `op` x 
 
-scanl :: (b -> a -> b) -> b -> [a] -> b 
-scanl _ e []         = [e] 
-scanl op e [x]       = e : (e `op` x) : [] 
-scanl op e (x:x':xs) = 
+-- Ta errado?
+scanl :: (b -> a -> b) -> b -> [a] -> [b]
+scanl _ e []               = [e]
+scanl op e [x]             = e : [op e x]
+scanl op e (x':xs'@(x:xs)) = op e x' : (map (\u -> op u x) (scanl op e xs'))
 
-scanr :: (b -> a -> b) -> b -> [a] -> b
-scanr _ e []      = e 
-scanr op e (x:xs) = scanr op e xs `op` x 
+-- canr :: (b -> a -> b) -> b -> [a] -> b
+-- canr _ e []      = e 
+-- canr op e (x:xs) = scanr op e xs `op` x 
 
 takeWhile :: (a -> Bool) -> [a] -> [a]
 takewhile _ []     = [] 
