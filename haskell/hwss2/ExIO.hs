@@ -41,7 +41,9 @@ skip :: IO ()
 skip = undefined
 
 newline :: IO ()
-newline = undefined
+newline = 
+  do 
+    putChar '\n' 
 
 
 -- falha
@@ -58,7 +60,12 @@ putStr (c:cs) =
 -- transform f into one "just like f" except that it prints a newline
 -- after any side-effects f may had
 lnize :: (a -> IO b) -> a -> IO b
-lnize f = undefined
+lnize iob x = 
+  do 
+    -- putChar '\n'
+    b <- iob x
+    putChar '\n'
+    pure b 
 
 putStrLn :: String -> IO ()
 putStrLn = lnize putStr
@@ -92,7 +99,6 @@ forever = undefined
 void :: IO a -> IO ()
 void = undefined
 
-
 -- Kleisli compositions
 infixr 1 >=>, <=<
 
@@ -106,7 +112,6 @@ f >=> g = undefined
 -- (<=<) :: (b -> IO c) -> (a -> IO b) -> a -> IO c
 (<=<) :: (b -> IO c) -> (a -> IO b) -> (a -> IO c)
 (<=<) = flip (>=>)
-
 
 -- Bind
 infixl 1 >>=
