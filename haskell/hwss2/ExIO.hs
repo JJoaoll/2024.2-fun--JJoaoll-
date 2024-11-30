@@ -17,17 +17,29 @@ import Prelude hiding
 -- Use getChar e putChar
 --
 
--- getLine :: IO String
--- getLine = 
-  -- do  
-    -- hSetEcho stdin False
-    -- c <- getChar 
-    -- hSetEcho stdin True
-    -- putChar c 
-    -- case c of 
-      -- '\n' -> pure "" 
-      -- _    -> pure (c : getLine) 
+getLine :: IO String
+getLine = 
+  do 
+    c <- getChar 
+    case c of 
+      '\n' -> 
+      _    -> 
 
+scrollCaster :: [IO a] -> IO [a] 
+scrollCaster []               = pure []
+scrollCaster (spell : scroll) = 
+  do
+    x  <- spell 
+    xs <- scrollCaster scroll 
+    pure $ x : xs
+
+
+doWhile :: IO a -> (a -> Bool) -> IO ()
+doWhile spell p =
+  do 
+    a <- spell
+    if p a then doWhile spell p 
+         else pure ()
 
 
 
@@ -75,20 +87,22 @@ newline =
 
 -- define it as a foldr
 putStr :: String -> IO ()
-putStr ""     = pure ()
-putStr (c:cs) =
-  do putChar c
-     putStr cs
+putStr cs = foldl (<<) (pure ()) (map putChar cs)
+-- foldl            :: (b -> a -> b) -> b -> [a] -> b 
+-- (<<)             :: IO b -> IO a -> IO b
+-- pure ()          :: IO () 
+-- (map putChar cs) :: [IO ()]
+
 
 -- transform f into one "just like f" except that it prints a newline
 -- after any side-effects f may had
 lnize :: (a -> IO b) -> a -> IO b
-lnize iob x =
+lnize spell x =
   do
     -- putChar '\n'
-    b <- iob x
-    putChar '\n'
-    pure b
+    b <- spell x
+    putChar '\n' 
+    pure b        
 
 putStrLn :: String -> IO ()
 putStrLn = lnize putStr
@@ -97,14 +111,18 @@ putCharLn :: Char -> IO ()
 putCharLn = lnize putChar
 
 -- reads the entire user input as a single string, transforms it, and prints it
-interact :: (String -> String) -> IO ()
-interact = undefined
-
+-- interact :: (String -> String) -> IO ()
+-- interact f =
+  -- do 
+    -- str <- getline
+    -- putStr $ f str
+    -- -- pure ()
+-- 
 perlineize :: (String -> String) -> (String -> String)
 perlineize f = unlines . map f . lines
 
 interactPerLine :: (String -> String) -> IO ()
-interactPerLine = interact . perlineize
+interactPerLine = undefined --interact . perlineize
 
 when :: Bool -> IO () -> IO ()
 when False _ = pure ()
