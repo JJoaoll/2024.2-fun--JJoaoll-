@@ -1,5 +1,7 @@
 module ExIO where
+import System.IO (hSetEcho, stdin)
 
+import qualified Data.Char as C
 import Prelude hiding
     ( putStr
     , putStrLn
@@ -15,11 +17,22 @@ import Prelude hiding
 -- Use getChar e putChar
 --
 
-getLine :: IO String
-getLine = undefined
+-- getLine :: IO String
+-- getLine = 
+  -- do  
+    -- hSetEcho stdin False
+    -- c <- getChar 
+    -- hSetEcho stdin True
+    -- putChar c 
+    -- case c of 
+      -- '\n' -> pure "" 
+      -- _    -> pure (c : getLine) 
+
+
+
 
 getInt :: IO Int
-getInt = undefined
+getInt = C.digitToInt <$> getChar
 
 getSafeInt :: IO (Maybe Int)
 getSafeInt = undefined
@@ -27,23 +40,33 @@ getSafeInt = undefined
 -- sequencing: first do f ignoring its result, then do g and keep its result
 infixl 1 >>
 
+-- Dá pra ler como "E depois"
 (>>) :: IO a -> IO b -> IO b
-ax >> ay = 
-  do 
-    ax 
+ax >> ay =
+  do
+    ax
     ay
+
+(<<) :: IO b -> IO a -> IO b
+(<<) = flip (>>)
+
 
 -- pauses till the user presses any normal key
 pause :: IO ()
-pause = undefined
+pause =
+    do
+        hSetEcho stdin False
+        getChar
+        hSetEcho stdin True
+        -- pure ()
 
 skip :: IO ()
 skip = undefined
 
 newline :: IO ()
-newline = 
-  do 
-    putChar '\n' 
+newline =
+  do
+    putChar '\n'
 
 
 -- falha
@@ -52,20 +75,20 @@ newline =
 
 -- define it as a foldr
 putStr :: String -> IO ()
-putStr ""     = pure () 
-putStr (c:cs) = 
+putStr ""     = pure ()
+putStr (c:cs) =
   do putChar c
      putStr cs
 
 -- transform f into one "just like f" except that it prints a newline
 -- after any side-effects f may had
 lnize :: (a -> IO b) -> a -> IO b
-lnize iob x = 
-  do 
+lnize iob x =
+  do
     -- putChar '\n'
     b <- iob x
     putChar '\n'
-    pure b 
+    pure b
 
 putStrLn :: String -> IO ()
 putStrLn = lnize putStr
@@ -84,11 +107,11 @@ interactPerLine :: (String -> String) -> IO ()
 interactPerLine = interact . perlineize
 
 when :: Bool -> IO () -> IO ()
-when False _ = pure () 
-when True  f = do f 
+when False _ = pure ()
+when True  f = do f
 
 unless :: Bool -> IO () -> IO ()
-unless = when . not 
+unless = when . not
 
 guard :: Bool -> IO ()
 guard = undefined
@@ -96,19 +119,26 @@ guard = undefined
 forever :: IO a -> IO b
 forever f =
   do
-    f 
+    f
     forever f
 
 -- transforms the action given to an equivalent one that has no result
 void :: IO a -> IO ()
-void _ = pure ()
+void action =
+    do
+        _ <- action
+        pure ()
 
 -- Kleisli compositions
 infixr 1 >=>, <=<
 
 -- diagrammatic order
 (>=>) :: (a -> IO b) -> (b -> IO c) -> (a -> IO c)
-f >=> g = undefined
+f >=> g = \a ->
+    do
+        b <- f a
+        g b
+
 
 -- traditional order
 -- comparison of types:
@@ -141,14 +171,20 @@ filterIO :: (a -> IO Bool) -> [a] -> IO [a]
 filterIO = undefined
 
 iomap :: (a -> b) -> IO a -> IO b
-iomap f ioa = 
-  do 
-    
-    
-    
+iomap f actA =
+    do
+       -- que sintaxe é essa?? 
+       -- f <$> actA
+       a <- actA
+       pure $ f a
 
+-- dá pra melhorar
 mapIO :: (a -> IO b) -> [a] -> IO [b]
-mapIO = undefined
+mapIO _ []     = pure []
+mapIO f (x:xs) =
+  do
+    f x
+    mapIO f xs
 
 zipWithIO :: (a -> b -> IO c) -> [a] -> [b] -> IO [c]
 zipWithIO = undefined
@@ -157,7 +193,12 @@ zipWithIO_ :: (a -> b -> IO c) -> [a] -> [b] -> IO ()
 zipWithIO_ = undefined
 
 sequenceIO :: [IO a] -> IO [a]
-sequenceIO = undefined
+sequenceIO []     = pure []
+sequenceIO (f:fs) =
+    do
+      x  <- f
+      let fs' = sequenceIO fs
+      error "falta terminar"
 
 sequenceIO_ :: [IO a] -> IO ()
 sequenceIO_ = undefined
