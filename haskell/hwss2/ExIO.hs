@@ -84,20 +84,24 @@ interactPerLine :: (String -> String) -> IO ()
 interactPerLine = interact . perlineize
 
 when :: Bool -> IO () -> IO ()
-when = undefined
+when False _ = pure () 
+when True  f = do f 
 
 unless :: Bool -> IO () -> IO ()
-unless = undefined
+unless = when . not 
 
 guard :: Bool -> IO ()
 guard = undefined
 
 forever :: IO a -> IO b
-forever = undefined
+forever f =
+  do
+    f 
+    forever f
 
 -- transforms the action given to an equivalent one that has no result
 void :: IO a -> IO ()
-void = undefined
+void _ = pure ()
 
 -- Kleisli compositions
 infixr 1 >=>, <=<
@@ -119,7 +123,6 @@ infixl 1 >>=
 (>>=) :: IO a -> (a -> IO b) -> IO b
 ax >>= f = undefined
 
-
 infixl 4 $>, <$
 
 -- make an action that has the side effects of the action on the left
@@ -138,7 +141,11 @@ filterIO :: (a -> IO Bool) -> [a] -> IO [a]
 filterIO = undefined
 
 iomap :: (a -> b) -> IO a -> IO b
-iomap = undefined
+iomap f ioa = 
+  do 
+    
+    
+    
 
 mapIO :: (a -> IO b) -> [a] -> IO [b]
 mapIO = undefined
