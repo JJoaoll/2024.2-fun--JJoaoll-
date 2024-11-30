@@ -1,0 +1,55 @@
+1. 
+
+
+
+2. Dadas funções f : α → γ e g : β → δ 
+  mostra como definir ? : α × β → γ × δ 
+  (i) manualmente; 
+  (ii) aproveitando algo sobre um 
+  (×) que aparece aí (qual dos dois, e qual é o tal algo?)
+  
+  (i) -> 
+    Tendo f : α → γ
+          g : β → δ
+    
+    h : α × β → γ × δ 
+    h (a, b) = (f a, g b)
+    
+    -- na minha sintaxe, optei em colocar
+    -- o 'P' em upcase pra destacar que
+    -- se trata de um nome próprio. 
+    -- (oq pode parecer estranho, mas qm sabe, sabe)
+    Pairing :: (γ → α) → (γ → β) → (γ → α × β)
+    Pairing f g x = (f x, g x)
+
+    partindo disso, conseguimos ainda o 
+    delta :: α → α × α
+    delta = Pairing id id
+
+    Agora, definamos a h em termos
+    da pairing: 
+
+     h : α × β → γ × δ 
+     h = Pairing (f . outL) (g . outR)
+     
+     Finalmente, o nome bom pra "(?)" 
+     ficou sendo f × g, onmde: 
+
+     (×) : (α → γ) → (β → δ) → (α × β → γ × δ)
+     f × g = Pairing (f . outL) (g . outR)
+
+
+3. Dadas funções f : α → γ e g : β → δ 
+  mostra como definir ? : α + β ← γ + δ 
+  (i) manualmente; 
+  (ii) aproveitando algo sobre um 
+  (+) que aparece aí (qual dos dois, e qual é o tal algo?)
+
+  Tendo as f : α → γ 
+           g : β → δ 
+
+  Defino, manualmente, 
+  
+  h : 
+
+
