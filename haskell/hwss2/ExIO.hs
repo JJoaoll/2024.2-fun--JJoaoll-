@@ -1,3 +1,5 @@
+{-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
+{-# HLINT ignore "Use if" #-}
 module ExIO where
 import System.IO (hSetEcho, stdin)
 
@@ -21,9 +23,13 @@ getLine :: IO String
 getLine = 
   do 
     c <- getChar 
+    cs <- case c of 
+            '\n' -> pure "" 
+            _    -> getLine
     case c of 
-      '\n' -> 
-      _    -> 
+      '\n' -> pure      cs 
+      _    -> pure (c : cs)
+                          
 
 scrollCaster :: [IO a] -> IO [a] 
 scrollCaster []               = pure []
@@ -40,7 +46,6 @@ doWhile spell p =
     a <- spell
     if p a then doWhile spell p 
          else pure ()
-
 
 
 getInt :: IO Int
@@ -185,8 +190,16 @@ x <$ ioy = undefined
 ap :: IO (a -> b) -> IO a -> IO b
 af `ap` ax = undefined
 
+-- w de writer ou r de reader
 filterIO :: (a -> IO Bool) -> [a] -> IO [a]
-filterIO = undefined
+filterIO _ []       = pure []
+filterIO w (x : xs) = 
+  do
+    b   <- w x 
+    xs' <- filterIO w xs 
+    if b then pure (x : xs') 
+         else pure xs'
+
 
 iomap :: (a -> b) -> IO a -> IO b
 iomap f actA =
