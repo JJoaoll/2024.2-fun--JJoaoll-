@@ -94,11 +94,11 @@ ax >> ay =
 -- pauses till the user presses any normal key
 pause :: IO ()
 pause =
-  do
-    hSetEcho stdin False
-    getChar
-    hSetEcho stdin True
-    -- pure ()
+    do
+        hSetEcho stdin False
+        getChar
+        hSetEcho stdin True
+        -- pure ()
 
 skip :: IO ()
 skip = undefined
@@ -160,7 +160,7 @@ unless :: Bool -> IO () -> IO ()
 unless = when . not
 
 guard :: Bool -> IO ()
-guard b = if b then 
+guard = undefined
 
 forever :: IO a -> IO b
 forever f =
@@ -171,9 +171,9 @@ forever f =
 -- transforms the action given to an equivalent one that has no result
 void :: IO a -> IO ()
 void action =
-  do
-    _ <- action
-    pure ()
+    do
+        _ <- action
+        pure ()
 
 -- Kleisli compositions
 infixr 1 >=>, <=<
