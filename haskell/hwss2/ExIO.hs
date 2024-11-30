@@ -24,11 +24,11 @@ getLine :: IO String
 getLine =
   do
     c <- getChar
-    case c of 
+    case c of
       '\n' -> pure ""
-      _    -> 
-        do 
-          s <- getLine 
+      _    ->
+        do
+          s <- getLine
           pure (c : s)
 
 
@@ -44,22 +44,23 @@ getLine =
     case c of 
       '\n' -> pure      cs 
       _    -> pure (c : cs)
--}                        
+-}
 
-scrollCaster :: [IO a] -> IO [a] 
+-- se receber um scroll, ele retorna um cast de todo o scroll
+scrollCaster :: [IO a] -> IO [a]
 scrollCaster []               = pure []
-scrollCaster (spell : scroll) = 
+scrollCaster (spell : scroll) =
   do
-    x  <- spell 
-    xs <- scrollCaster scroll 
+    x  <- spell
+    xs <- scrollCaster scroll
     pure $ x : xs
 
 
 doWhile :: IO a -> (a -> Bool) -> IO ()
 doWhile spell p =
-  do 
+  do
     a <- spell
-    if p a then doWhile spell p 
+    if p a then doWhile spell p
          else pure ()
 
 
@@ -67,12 +68,12 @@ getInt :: IO Int
 getInt = C.digitToInt <$> getChar
 
 getSafeInt :: IO (Maybe Int)
-getSafeInt = 
-  do 
-    hSetEcho stdin False  
-    c <- getChar 
+getSafeInt =
+  do
+    hSetEcho stdin False
+    c <- getChar
     hSetEcho stdin True
-    if C.isDigit c 
+    if C.isDigit c
     then pure $ Just (C.digitToInt c)
     else pure Nothing
 
@@ -129,8 +130,8 @@ lnize spell x =
   do
     -- putChar '\n'
     b <- spell x
-    putChar '\n' 
-    pure b        
+    putChar '\n'
+    pure b
 
 putStrLn :: String -> IO ()
 putStrLn = lnize putStr
@@ -160,7 +161,7 @@ unless :: Bool -> IO () -> IO ()
 unless = when . not
 
 guard :: Bool -> IO ()
-guard b = if b then 
+guard b = undefined
 
 forever :: IO a -> IO b
 forever f =
@@ -216,11 +217,11 @@ af `ap` ax = undefined
 -- w de writer ou r de reader
 filterIO :: (a -> IO Bool) -> [a] -> IO [a]
 filterIO _ []       = pure []
-filterIO w (x : xs) = 
+filterIO w (x : xs) =
   do
-    b   <- w x 
-    xs' <- filterIO w xs 
-    if b then pure (x : xs') 
+    b   <- w x
+    xs' <- filterIO w xs
+    if b then pure (x : xs')
          else pure xs'
 
 
@@ -247,27 +248,46 @@ zipWithIO_ :: (a -> b -> IO c) -> [a] -> [b] -> IO ()
 zipWithIO_ = undefined
 
 sequenceIO :: [IO a] -> IO [a]
+sequenceIO = scrollCaster
+{-
 sequenceIO []     = pure []
 sequenceIO (f:fs) =
     do
       x  <- f
       let fs' = sequenceIO fs
       error "falta terminar"
+-}
 
+-- oq significam esses "_"?
+-- eh pq não retorna algo?
 sequenceIO_ :: [IO a] -> IO ()
-sequenceIO_ = undefined
+sequenceIO_ scroll =
+  do
+    scrollCaster scroll
+    pure ()
 
 replicateIO :: Integral i => i -> IO a -> IO [a]
-replicateIO = undefined
+replicateIO num spell =
+  if num <= 0 then pure []
+  else
+    do
+      x  <- spell
+      xs <- replicateIO (num - 1) spell
+      pure (x : xs)
 
 replicateIO_ :: Integral i => i -> IO a -> IO ()
-replicateIO_ = undefined
+replicateIO_ num spell = do
+    _ <- replicateIO num spell
+    pure ()
 
 forIO :: [a] -> (a -> IO b) -> IO [b]
 forIO = undefined
 
 forIO_ :: [a] -> (a -> IO b) -> IO ()
-forIO_ = undefined
+forIO_ xs action = 
+  do
+    _ -> forIO xs action
+    pure ()
 
 joinIO :: IO (IO a) -> IO a
 joinIO = undefined
