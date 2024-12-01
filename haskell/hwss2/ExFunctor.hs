@@ -13,7 +13,8 @@ instance Funktor [] where
     fmap = map
 
 instance Funktor Maybe where
-    fmap = undefined
+    fmap _ Nothing = Nothing 
+    fmap f (Just x) = Just (f x)
 
 -- what about Either?
 
@@ -22,6 +23,8 @@ instance Funktor Maybe where
 -- what about functions?
 
 -- what about Trees?
+
+-- what about IO? 
 
 -- ...define Functor instances of as many * -> * things as you can think of!
 

@@ -18,22 +18,38 @@ import qualified Prelude as P
 -- define the following folds:
 --
 
+-- let's define a type tester:
+contest :: String -> String -> String
+""   `contest` str2 = "nil" `contest` str2
+str1 `contest` ""   = str1  `contest` "nil"
+str1 `contest` str2 = "(" ++ str1 ++ " # " ++ str2 ++ ")"
+
 -- foldr (#) v [x1, x2, x3, x4] = (x1 # (x2 # (x3 # (x4 # v))))
-foldr :: undefined
-foldr = undefined
+foldr :: (a -> b -> b) -> b -> [a] -> b 
+foldr _ e []        = e 
+foldr op e (x : xs) = x `op` foldr op e xs 
 
 -- foldl (#) v [x1, x2, x3, x4] = ((((v # x1) # x2) # x3) # x4)
-foldl :: undefined
-foldl = undefined
+foldl :: (b -> a -> b) -> b -> [a] -> b 
+foldl _ e []        = e  
+foldl op e (x : xs) = foldl op e xs `op` x
+
 
 -- foldr1 (#) [x1, x2, x3, x4] = (x1 # (x2 # (x3 # x4)))
-foldr1 :: undefined
-foldr1 = undefined
+foldr1 :: (a -> a -> a) -> [a] -> Maybe a     
+foldr1 _ []        = Nothing 
+foldr1 _ [x]       = Just x
+foldr1 op (x : xs) = 
+  let Just x' = foldr1 op xs 
+  in  Just (x `op` x') 
 
 -- foldl1 (#) [x1, x2, x3, x4]  = (((x1 # x2) # x3) # x4)
-foldl1 :: undefined
-foldl1 = undefined
-
+foldl1 :: (a -> a -> a) -> [a] -> Maybe a
+foldl1 _ []        = Nothing                     
+foldl1 _ [x]       = Just x 
+foldl1 op (x : xs) = 
+  let Just x' = foldl1 op xs 
+  in  Just (x' `op` x)
 
 --
 -- define the following scans:
@@ -120,4 +136,3 @@ safeLast = undefined
 -- dec2int [1,9,9,2] = 1992
 dec2int :: Integral i => [i] -> i
 dec2int = undefined
-
