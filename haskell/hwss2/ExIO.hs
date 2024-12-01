@@ -109,7 +109,7 @@ pause =
     pure ()
 
 skip :: IO ()
-skip = undefined
+skip = wrap () 
 
 newline :: IO ()
 newline =
@@ -158,17 +158,18 @@ perlineize :: (String -> String) -> (String -> String)
 perlineize f = unlines . map f . lines
 
 interactPerLine :: (String -> String) -> IO ()
-interactPerLine = undefined --interact . perlineize
+interactPerLine = interact . perlineize
 
 when :: Bool -> IO () -> IO ()
-when False _ = pure ()
+when False _ = skip
 when True  f = do f
 
 unless :: Bool -> IO () -> IO ()
 unless = when . not
 
 guard :: Bool -> IO ()
-guard b = undefined
+guard True  = skip 
+guard False = do guard False 
 
 forever :: IO a -> IO b
 forever f =
@@ -178,10 +179,7 @@ forever f =
 
 -- transforms the action given to an equivalent one that has no result
 void :: IO a -> IO ()
-void action =
-  do
-    _ <- action
-    pure ()
+void action = action $> ()
 
 -- Kleisli compositions
 infixr 1 >=>, <=<
@@ -276,7 +274,7 @@ zipWithIO_ :: (a -> b -> IO c) -> [a] -> [b] -> IO ()
 zipWithIO_ w xs ys =
   do
     _ <- zipWithIO w xs ys
-    return ()
+    skip
 
 
 sequenceIO :: [IO a] -> IO [a]
@@ -346,6 +344,6 @@ foldlIO op e xs =
 
 
 foldlIO_ :: (b -> a -> IO b) -> b -> [a] -> IO ()
-foldlIO_ op e xs = foldlIO op e xs $> ()
+foldlIO_ op e = void . foldlIO op e  
 
 
