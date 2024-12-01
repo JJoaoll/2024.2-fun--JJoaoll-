@@ -59,10 +59,12 @@ scrollCaster (spell : scroll) =
 
 doWhile :: IO a -> (a -> Bool) -> IO ()
 doWhile spell p =
-  do
-    a <- spell
-    if p a then doWhile spell p
-         else pure ()
+  do {
+    a <- spell; 
+    (if p a 
+    then doWhile spell p
+    else pure ());
+  }
 
 
 getInt :: IO Int
