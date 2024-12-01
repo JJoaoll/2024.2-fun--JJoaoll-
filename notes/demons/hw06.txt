@@ -122,9 +122,46 @@ Calculamos:
   = ((f ∘ h) x, (g ∘ h) x) [<- Def. (∘)]
   = ⟨f ∘ h, g ∘ h⟩ x.      [<- Def. ⟨f, g⟩]
 
+4.4 ->
+
+Θ. (f × h) ∘ ⟨g, k⟩ = ⟨f ∘ g, h ∘ k⟩
+
+Seja x : α. 
+Calculamos: 
+  ⟨f ∘ g, h ∘ k⟩ x         
+  = ((f ∘ g) x, (h ∘ k) x) [Def. ⟨f, g⟩]
+  = (f (g x), h (k x)).    [Def. (∘)] 
+
+  ((f × h) ∘ ⟨g, k⟩) x      
+  = (f × h) (⟨g, k⟩ x)     [Def. (∘)]
+  = (f × h) (g x, k x)     [Def. ⟨f, g⟩]
+  = (f (g x), h (k x)).    [Def. (f × g)]
+
+ 
+
+
+
 4.5 -> 
 
 1_A × 1_B = 1_A × B 
+
+
+4.6 -> 
+
+Θ. (f × h) ∘ (g × k) = (f ∘ g) × (h ∘ k)
+
+Sejam (a, b) : α × β. 
+Calculamos: 
+  ((f × h) ∘ (g × k)) (a, b)
+  = (f × h) ((g × k) (a, b))
+  = (f × h) (g a, k b)
+  = (f (g a), h (k b))
+  = ((f ∘ g) a, (h ∘ k) b)
+  = ((f ∘ g) × (h ∘ k) (a, b).
+Qed. 
+
+
+
 
 
 
