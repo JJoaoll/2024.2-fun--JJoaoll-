@@ -77,12 +77,12 @@ getSafeInt :: IO (Maybe Int)
 getSafeInt =
   do
     str <- getLine
-    if hasDigits str
-    then return $ Just $ read $ digits str
-    else return Nothing
+    return 
+      (case reads str :: [(Int, String)] of 
+        []             -> Nothing
+        [(num, str')]  -> Just num 
+        _              -> error "algo deu muito errado!")
 
-  where digits    = filter C.isDigit
-        hasDigits = any C.isDigit 
 
 
 -- sequencing: first do f ignoring its result, then do g and keep its result
