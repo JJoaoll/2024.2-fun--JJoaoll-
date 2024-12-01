@@ -39,6 +39,7 @@
      f × g = Pairing (f . outL) (g . outR)
 
 
+
 3. Dadas funções f : α → γ e g : β → δ 
   mostra como definir ? : α + β ← γ + δ 
   (i) manualmente; 
@@ -108,6 +109,24 @@ Similarmente, g x = h x.
 Sem perda de generalidade, concluimos
 que f = k e g = h. 
 Qed.
+
+
+4.3 ->
+  
+Θ. ⟨f ∘ h, g ∘ h⟩ = ⟨f , g⟩ ∘ h 
+Seja x : α. 
+Calculamos: 
+  (⟨f , g⟩ ∘ h) x 
+  = ⟨f , g⟩ (h x)          [-> Def. (∘)]
+  = (f (h x), g (h x))     [-> Def. ⟨f, g⟩]
+  = ((f ∘ h) x, (g ∘ h) x) [<- Def. (∘)]
+  = ⟨f ∘ h, g ∘ h⟩ x.      [<- Def. ⟨f, g⟩]
+
+4.5 -> 
+
+1_A × 1_B = 1_A × B 
+
+
 
 
 
