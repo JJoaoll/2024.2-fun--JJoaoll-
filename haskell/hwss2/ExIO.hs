@@ -19,7 +19,9 @@ import Prelude hiding
 -- Use getChar e putChar
 --
 
-
+-- nome melhor?
+wrap :: a -> IO a
+wrap = pure  
 
 getLine :: IO String
 getLine =
@@ -30,9 +32,7 @@ getLine =
       _    ->
         do
           s <- getLine
-          pure (c : s)
-
-
+          wrap (c : s)
 
 {-
 getLine :: IO String
@@ -79,9 +79,9 @@ getSafeInt =
     str <- getLine
     return 
       (case reads str :: [(Int, String)] of 
-        []             -> Nothing
-        [(num, str')]  -> Just num 
-        _              -> error "algo deu muito errado!")
+        []          -> Nothing
+        [(num, _)]  -> Just num 
+        _           -> error "algo deu muito errado!")
 
 
 
@@ -123,7 +123,7 @@ newline =
 
 -- define it as a foldr
 putStr :: String -> IO ()
-putStr cs = foldl (<<) (pure ()) (map putChar cs)
+putStr cs = foldr (>>) (pure ()) (map putChar cs)
 -- foldl            :: (b -> a -> b) -> b -> [a] -> b 
 -- (<<)             :: IO b -> IO a -> IO b
 -- pure ()          :: IO () 
@@ -147,13 +147,13 @@ putCharLn :: Char -> IO ()
 putCharLn = lnize putChar
 
 -- reads the entire user input as a single string, transforms it, and prints it
--- interact :: (String -> String) -> IO ()
--- interact f =
-  -- do 
-    -- str <- getline
-    -- putStr $ f str
-    -- -- pure ()
--- 
+interact :: (String -> String) -> IO ()
+interact f =
+   do 
+     str <- getLine
+     putStr $ f str
+     -- pure ()
+ 
 perlineize :: (String -> String) -> (String -> String)
 perlineize f = unlines . map f . lines
 
@@ -204,22 +204,35 @@ f >=> g = \a ->
 -- Bind
 infixl 1 >>=
 
+-- is this even useful?
 (>>=) :: IO a -> (a -> IO b) -> IO b
-ax >>= f = undefined
+spell_x >>= f = 
+  do
+    x <- spell_x 
+    y <- f x
+    wrap y
+     
 
 infixl 4 $>, <$
 
 -- make an action that has the side effects of the action on the left
 -- but with result the value on the right
 ($>) :: IO a -> b -> IO b
-ax $> y = undefined
+spell_x $> y = 
+  do 
+    x <- spell_x 
+    wrap y
 
 -- vice-versa
 (<$) :: a -> IO b -> IO a
-x <$ ioy = undefined
+(<$) = flip ($>)
 
 ap :: IO (a -> b) -> IO a -> IO b
-af `ap` ax = undefined
+af `ap` ax =
+  do 
+    f <- af 
+    x <- ax 
+    wrap $ f x
 
 -- w de writer ou r de reader
 filterIO :: (a -> IO Bool) -> [a] -> IO [a]
@@ -298,10 +311,8 @@ replicateIO num spell =
 
 
 replicateIO_ :: Integral i => i -> IO a -> IO ()
-replicateIO_ num spell = do
-    _ <- replicateIO num spell
-    pure ()
-
+replicateIO_ num spell = replicateIO num spell $> ()
+  
 
 forIO :: [a] -> (a -> IO b) -> IO [b]
 forIO [] _       = return []
@@ -313,19 +324,28 @@ forIO (x : xs) w =
 
 
 forIO_ :: [a] -> (a -> IO b) -> IO ()
-forIO_ xs action =
-  do
-    _ <- forIO xs action
-    pure ()
-
+forIO_ xs action = forIO xs action $> () 
 
 joinIO :: IO (IO a) -> IO a
-joinIO = undefined
+joinIO spell_spell_a = 
+  do 
+    spell_a <- spell_spell_a
+    a       <- spell_a 
+    wrap a
 
 foldlIO :: (b -> a -> IO b) -> b -> [a] -> IO b
-foldlIO = undefined
+--foldlIO _ e [] = wrap e 
+foldlIO op e xs = 
+  do 
+    (case xs of
+      []       -> wrap e
+      (x : xs) -> 
+        do
+          b <- foldlIO op e xs
+          b `op` x)
+
 
 foldlIO_ :: (b -> a -> IO b) -> b -> [a] -> IO ()
-foldlIO_ = undefined
+foldlIO_ op e xs = foldlIO op e xs $> ()
 
 
