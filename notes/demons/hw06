@@ -50,6 +50,64 @@
 
   Defino, manualmente, 
   
-  h : 
+  h : α + β ← γ + δ 
+  h (Left a)  = Left  $ f a 
+  h (Right b) = Right $ g b
+
+  Agora, aproveitando a Co-Pairing
+  definida por:
+
+  Co-Pairing :: (γ ← α) → (γ ← β) → (γ ← α + β)
+  Co-Pairing f g (Left a)  = f a 
+  Co-Pairing f g (Right b) = g b  
+
+  -- Tem algo legal que da pra definir com isso? 
+  -- Como o delta pra Copairing? 
+
+  Co-Delta :: α + α → α
+  Co-Delta Left  a  = a 
+  Co-Delta Right a' = a'
+  
+  ou ainda, mlr:
+  Co-Delta :: α + α → α
+  Co-Delta = Co-Pairing id id
+
+  Agora, definamos a h em termos
+  da Co-Pairing: 
+
+  h : α + β ← γ + δ 
+  h = Co-Pairing (f . inL) (g . inR)
+  -- confuuuuuuuuuuuuuuuuso 
+
+
+  Por fim, o nome bom termina sendo:
+  (+) : (α ← γ) → (β ← δ) → (α + β ← γ + δ)
+  f × g = Pairing (f . outL) (g . outR)
+
+4.1 -> 
+  
+
+    Pairing :: (γ → α) → (γ → β) → (γ → α × β)
+    Pairing f g x = (f x, g x)
+
+    <f, g> x = (f x, g x) 
+    Logo, se <f, g> = <k, h>,
+    Então ∀x, <f, g> x = <k, h> x,
+    e logo (f x, g x) = (k x, h x).
+
+Θ. <f, g> = <k, h> ⇒ f = k & 
+                         g = h
+
+Seja x : α, calculamos:
+  <f, g> x = (f x, g x). [ Pairing.1 ]
+  <k, h> x = (k x, h x). [ Pairing.1 ]
+Logo (f x, g x) = (k x, h x), pela hipótese.
+Mas logo outL (f x, g x) = outL (k x, h x)
+e logo f x = k x, pela (outL.1).
+Similarmente, g x = h x. 
+Sem perda de generalidade, concluimos
+que f = k e g = h. 
+Qed.
+
 
 
