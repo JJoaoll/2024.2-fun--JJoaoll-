@@ -20,6 +20,7 @@ import Prelude hiding
 --
 
 
+
 getLine :: IO String
 getLine =
   do
@@ -65,17 +66,23 @@ doWhile spell p =
 
 
 getInt :: IO Int
-getInt = C.digitToInt <$> getChar
+-- getInt = C.digitToInt <$> getChar
+getInt =
+  do
+    str <- getLine
+    let num = read str
+    return num
 
 getSafeInt :: IO (Maybe Int)
 getSafeInt =
   do
-    hSetEcho stdin False
-    c <- getChar
-    hSetEcho stdin True
-    if C.isDigit c
-    then pure $ Just (C.digitToInt c)
-    else pure Nothing
+    str <- getLine
+    if hasDigits str
+    then return $ Just $ read $ digits str
+    else return Nothing
+
+  where digits    = filter C.isDigit
+        hasDigits = any C.isDigit 
 
 
 -- sequencing: first do f ignoring its result, then do g and keep its result
@@ -98,8 +105,8 @@ pause =
   do
     hSetEcho stdin False
     getChar
-    hSetEcho stdin True
-    -- pure ()
+    -- hSetEcho stdin True
+    pure ()
 
 skip :: IO ()
 skip = undefined
@@ -241,14 +248,27 @@ mapIO f (x:xs) =
     f x
     mapIO f xs
 
+
 zipWithIO :: (a -> b -> IO c) -> [a] -> [b] -> IO [c]
-zipWithIO = undefined
+zipWithIO _ [] _          = return []
+zipWithIO _ _ []          = return []
+zipWithIO w (x:xs) (y:ys) =
+  do
+    z  <- x `w` y
+    zs <- zipWithIO w xs ys
+    return (z : zs)
+
 
 zipWithIO_ :: (a -> b -> IO c) -> [a] -> [b] -> IO ()
-zipWithIO_ = undefined
+zipWithIO_ w xs ys =
+  do
+    _ <- zipWithIO w xs ys
+    return ()
+
 
 sequenceIO :: [IO a] -> IO [a]
 sequenceIO = scrollCaster
+
 {-
 sequenceIO []     = pure []
 sequenceIO (f:fs) =
@@ -266,6 +286,7 @@ sequenceIO_ scroll =
     scrollCaster scroll
     pure ()
 
+
 replicateIO :: Integral i => i -> IO a -> IO [a]
 replicateIO num spell =
   if num <= 0 then pure []
@@ -275,19 +296,28 @@ replicateIO num spell =
       xs <- replicateIO (num - 1) spell
       pure (x : xs)
 
+
 replicateIO_ :: Integral i => i -> IO a -> IO ()
 replicateIO_ num spell = do
     _ <- replicateIO num spell
     pure ()
 
+
 forIO :: [a] -> (a -> IO b) -> IO [b]
-forIO = undefined
+forIO [] _       = return []
+forIO (x : xs) w =
+  do
+    y  <- w x
+    ys <- forIO xs w
+    return (y : ys)
+
 
 forIO_ :: [a] -> (a -> IO b) -> IO ()
-forIO_ xs action = 
+forIO_ xs action =
   do
-    _ -> forIO xs action
+    _ <- forIO xs action
     pure ()
+
 
 joinIO :: IO (IO a) -> IO a
 joinIO = undefined
