@@ -86,6 +86,20 @@
   f × g = Pairing (f . outL) (g . outR)
 
 4.1 -> 
+
+Θ. ⟨outl, outr⟩ = id 
+
+Sejam (a, b) : α × β.
+Calculamos: 
+  ⟨outL, outR⟩ (a, b)
+  = (outL (a, b), outR (a, b)) [<>]
+  = (a, b)                     [outL, outR]
+  = id (a, b).                 [id] 
+Qed. 
+
+
+
+4.2 -> 
   
 
     Pairing :: (γ → α) → (γ → β) → (γ → α × β)
@@ -144,6 +158,9 @@ Calculamos:
 4.5 -> 
 
 1_A × 1_B = 1_A × B 
+((), ()') = () 
+
+
 
 
 4.6 -> 
