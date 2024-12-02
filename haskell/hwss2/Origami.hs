@@ -2,6 +2,7 @@ module Origami where
 
 import Prelude hiding
     ( foldl , foldl1 , foldr , foldr1
+    , scanl, scanr
     , sum , product
     , length
     , concat
@@ -63,10 +64,14 @@ foldl1 op (x : xs) =
 --
 
 scanl :: (b -> a -> b) -> b -> [a] -> [b]
-scanl = undefined
+scanl op e []       = [e]
+scanl op e (x : xs) = e : xs'
+  where xs' = [y `op` x | y <- scanl op e xs]
 
 scanr :: (a -> b -> b) -> b -> [a] -> [b]
-scanr = undefined
+scanr op e []       = [e]
+scanr op e (x : xs) = xs' ++ [e]
+  where xs' = [x `op` y | y <- scanr op e xs]
 
 --
 -- Define all of the following functions as folds:

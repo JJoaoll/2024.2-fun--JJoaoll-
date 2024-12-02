@@ -77,15 +77,13 @@ getInt =
 
 getSafeInt :: IO (Maybe Int)
 getSafeInt =
-  do
-    str <- getLine
-    return 
-      (case reads str :: [(Int, String)] of 
-        []          -> Nothing
-        [(num, _)]  -> Just num 
-        _           -> error "algo deu muito errado!")
-
-
+  do {
+    str <- getLine;
+    wrap
+      (case reads str :: [(Int, String)] of
+        [(num, "")] -> Just num
+        _ -> Nothing);
+  }
 
 -- sequencing: first do f ignoring its result, then do g and keep its result
 infixl 1 >>

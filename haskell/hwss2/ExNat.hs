@@ -155,3 +155,24 @@ instance Num Nat where
       | x == 0    = undefined
       | otherwise = undefined
 
+
+o = O 
+so = S o 
+sso = S so
+ssso = S sso
+sssso = S ssso
+ssssso = S sssso
+sssssso = S ssssso
+ssssssso = S sssssso
+
+
+
+
+
+
+
+
+
+
+
+
