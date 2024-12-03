@@ -10,15 +10,30 @@ class Funktor f where
 
 
 instance Funktor [] where
+    fmap :: (a -> b) -> [a] -> [b] 
     fmap = map
 
 instance Funktor Maybe where
-    fmap _ Nothing = Nothing 
+    fmap :: (a -> b) -> Maybe a -> Maybe b 
+    fmap _ Nothing  = Nothing 
     fmap f (Just x) = Just (f x)
 
 -- what about Either?
+instance Funktor (Either e) where
+  fmap :: (a -> b) -> Either e a -> Either e b 
+  fmap _ (Left e)  = Left e
+  fmap f (Right x) = Right (f x)
+
+-- instance Funktor (Either _ v) where 
+-- Osu (How)
 
 -- what about pairs?
+instance Funktor (pairs a) where
+  fmap :: (a -> b) -> Either e a -> Either e b 
+  fmap _ (Left e)  = Left e
+  fmap f (Right x) = Right (f x)
+
+
 
 -- what about functions?
 
