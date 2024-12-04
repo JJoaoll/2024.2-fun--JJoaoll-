@@ -27,19 +27,35 @@ instance Funktor (Either e) where
 -- instance Funktor (Either _ v) where 
 -- Osu (How)
 
+
+data Pair a b = Pair a b
+
 -- what about pairs?
-instance Funktor (pairs a) where
-  fmap :: (a -> b) -> Either e a -> Either e b 
-  fmap _ (Left e)  = Left e
-  fmap f (Right x) = Right (f x)
-
-
+instance Funktor (Pair a) where
+  fmap :: (b -> c) -> (Pair a b -> Pair a c)
+  fmap f (Pair x y) = Pair x (f y) 
 
 -- what about functions?
+instance Funktor ((->) a) where
+  --comp... 
+  fmap :: (b -> c) -> ((a -> b) -> (a -> c))
+  fmap = (.)
+
+
+data BinTree a b where 
+  Node :: a -> BinTree a b
+  Fork :: b -> BinTree a b -> BinTree a b -> BinTree a b
+
 
 -- what about Trees?
+instance Funktor (BinTree a) where 
+  fmap :: (b -> c) -> (BinTree a b -> BinTree a c)
+  fmap _ (Node x)     = Node x 
+  fmap f (Fork y l r) = Fork (f y) (fmap f l) (fmap f r)
+
 
 -- what about IO? 
+
 
 -- ...define Functor instances of as many * -> * things as you can think of!
 
