@@ -14,6 +14,7 @@ catMaybes (m:ms) = case m of
                    Just x  -> x:ms'
   where ms' = catMaybes ms
 
+-- E tem como? 
 fromJust :: Maybe a -> a
 fromJust (Just x) = x 
 fromJust _        = error "Nothing here"
