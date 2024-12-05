@@ -15,6 +15,11 @@ data Tree a where
   Node :: a -> Tree a -> Tree a -> Tree a
   deriving Eq 
 
+rev :: Tree a -> Tree a
+rev Nil = Nil 
+rev (Node val l r) = (Node val (rev r) (rev l))
+
+
 instance (Show a) => (Show (Tree a)) where
   show Nil           = "Nil"
   show (Node x t t') = "Node " ++ show x ++ " (" ++ show t ++ ", " ++ show t' ++ ")" 
