@@ -1,12 +1,16 @@
 module Map where 
 
 import Nat
-import ExList  hiding (replicate, map)
+import ExList  hiding (replicate)
 import Prelude ( Eq (..), Show (..), (.)
                , IO (..), pure, return, putStrLn
                , replicate
                , ($), undefined 
+               , String (..), Char (..)
                ) 
+
+import qualified Prelude as P
+
 
 data Map a where 
   Map :: [[a]] -> Map a
@@ -31,14 +35,7 @@ replaceIn v (Coordinate (S n, y)) (Map (vs : vss)) =
 wrap :: a -> IO a 
 wrap = pure 
 
-printMap :: Show a => Map a -> IO () 
-printMap (Map vss) = undefined 
-  -- putStrLn $ concatWith '\n' (map map show vss)
+formatMap :: Show a => [[a]] -> String
+formatMap str =  concatWith '\n' ((map . map) P.show str)
 
-
-
-
-  
-
-
-
+    
