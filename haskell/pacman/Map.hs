@@ -53,9 +53,7 @@ printMap = putStrLn . formatMap . fmap show
 --formatMap :: Show a  => [[a]] -> String
 --formatMap str =  concatWith '\n' ((map . map) P.show str)
 
-testmap = createMap 10 0  
 
-testPlay = undefined
     
     
 

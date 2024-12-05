@@ -1,7 +1,8 @@
 module Sprites where 
 
+import System.IO (hSetEcho, stdin)
 import Map 
-import Nat
+import Nat hiding (B, R)
 
 -- data State where 
 --   Dead      :: State
@@ -30,8 +31,65 @@ data Ghost where
            , ghostStatus :: GhostStatus 
            }             -> Ghost
 
+data Sprite where
+  Player :: Pacman -> Sprite
+  AI     :: Ghost  -> Sprite
+
+data Direction where
+  T :: Direction -- Top
+  L :: Direction -- Left
+  R :: Direction -- Right
+  B :: Direction -- Bot
+
+-- x -> vertical   (descendo)
+-- y -> horizontal (indo pra direita)
+
+move :: Coordinate -> Direction -> Coordinate
+move (Coordinate (x, y)) dir  =
+  case dir of
+    T -> Coordinate (px, y) 
+    L -> Coordinate (x, py) 
+    R -> Coordinate (x, S y) 
+    B -> Coordinate (S x, y) 
+
+  where px     = pred x 
+        py     = pred y
+        pred n = case n of 
+                   O   -> O
+                   S n -> n
+
+getMove :: IO Direction 
+getMove = 
+  do
+    hSetEcho stdin False
+    c <- getChar
+    case c of
+      'w' -> wrap T
+      'a' -> wrap L
+      's' -> wrap B
+      'd' -> wrap R
+      _   -> getMove
 
 
+testPlay :: Show a => Coordinate -> Map a -> (a, a) -> IO (Coordinate, Map a, (a,a))
+testPlay c@(Coordinate (x, y)) m@(Map vss) (sprite, bg) = 
+  do
+    printMap m
+    m <- getMove
+    let new_c   = move c m
+    let new_map = replaceIn sprite new_c (replaceIn bg c m)
+
+    
+
+     
+
+  
+
+-- tryToMove :: Show a => Pacman -> Map a -> IO (Map a)
+-- tryToMove (Pacman (Coordinate (x, y))) m = 
+--   do
+--     c <- getChar
+--     wrap m 
 
 
 
