@@ -8,7 +8,10 @@ data Maybe a = Nothing | Just a
     deriving (Show, Eq, Ord)
 
 catMaybes :: [Maybe a] -> [a]
-catMaybes = undefined
+catMaybes (m : ms) =
+  case m of 
+    Just _ -> 
+    _      ->
 
 fromJust :: Maybe a -> a
 fromJust = undefined

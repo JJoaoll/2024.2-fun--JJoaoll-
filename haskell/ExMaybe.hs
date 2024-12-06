@@ -39,7 +39,16 @@ listToMaybe = safeHead
 
 -- untested
 mapMaybe :: (a -> Maybe b) -> [a] -> [b]
-mapMaybe f = catMaybes . (map f) 
+-- mapmaybe f = catmaybes . (map f) 
+
+mapMaybe f []       = []
+mapMaybe f (x : xs) = 
+  case f x of
+    Just y -> y : ys
+    _      -> ys
+  where ys = mapMaybe f xs
+  
+-- mapmaybe f = catmaybes . (map f) 
 
 -- untested
 maybe :: b -> (a -> b) -> Maybe a -> b
@@ -52,4 +61,6 @@ maybeToList (Just x) = [x]
 
 tryToModifyWith :: [Maybe (a -> a)] -> [a] -> [a]
 tryToModifyWith = undefined  
+
+
 

@@ -64,25 +64,22 @@ getMove =
     hSetEcho stdin False
     c <- getChar
     case c of
-      'w' -> wrap T
-      'a' -> wrap L
-      's' -> wrap B
-      'd' -> wrap R
+      'h' -> wrap L
+      'j' -> wrap B
+      'k' -> wrap T
+      'l' -> wrap R
       _   -> getMove
 
+-- IO (Coordinate, Map a, (a,a))
 
-testPlay :: Show a => Coordinate -> Map a -> (a, a) -> IO (Coordinate, Map a, (a,a))
-testPlay c@(Coordinate (x, y)) m@(Map vss) (sprite, bg) = 
+testPlay :: Show a => Coordinate -> Map a -> (a, a) -> IO ()
+testPlay c@(Coordinate (x, y)) map@(Map vss) (sprite, bg) = 
   do
-    printMap m
+    printMap map
     m <- getMove
     let new_c   = move c m
-    let new_map = replaceIn sprite new_c (replaceIn bg c m)
-
-    
-
-     
-
+    let new_map = replaceIn sprite new_c (replaceIn bg c map)
+    testPlay new_c new_map (sprite, bg)
   
 
 -- tryToMove :: Show a => Pacman -> Map a -> IO (Map a)
