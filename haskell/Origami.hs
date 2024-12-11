@@ -97,13 +97,12 @@ concat :: [[a]] -> [a]
 concat = foldl (flip (++)) []
 -- concat = foldr (++) []
 
-
-
+-- valido?
 any :: (a -> Bool) -> [a] -> Bool
-any = undefined
+any p = or . map p
 
 all :: (a -> Bool) -> [a] -> Bool
-all = undefined
+all p = and . map p 
 
 and :: [Bool] -> Bool
 and = foldl (&&) True
