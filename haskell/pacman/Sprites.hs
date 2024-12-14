@@ -82,6 +82,8 @@ testPlay c@(Coordinate (x, y)) map@(Map vss) (sprite, bg) =
     testPlay new_c new_map (sprite, bg)
   
 
+tt = testPlay ()
+
 -- tryToMove :: Show a => Pacman -> Map a -> IO (Map a)
 -- tryToMove (Pacman (Coordinate (x, y))) m = 
 --   do

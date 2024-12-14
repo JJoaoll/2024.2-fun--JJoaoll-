@@ -36,13 +36,13 @@ snoc :: a -> [a] -> [a]
 snoc x = foldl (flip cons) [x]
 
 -- foldr (#) v [x1, x2, x3, x4] = (x1 # (x2 # (x3 # (x4 # v))))
-foldr :: (a -> b -> b) -> b -> [a] -> b 
-foldr _ e []        = e 
-foldr op e (x : xs) = x `op` foldr op e xs 
+foldr :: (a -> b -> b) -> b -> [a] -> b
+foldr _ e []        = e
+foldr op e (x : xs) = x `op` foldr op e xs
 
 -- foldl (#) v [x1, x2, x3, x4] = ((((v # x1) # x2) # x3) # x4)
-foldl :: (b -> a -> b) -> b -> [a] -> b 
-foldl _ e []        = e  
+foldl :: (b -> a -> b) -> b -> [a] -> b
+foldl _ e []        = e
 foldl op e (x : xs) = foldl op e xs `op` x
 
 
@@ -50,16 +50,16 @@ foldl op e (x : xs) = foldl op e xs `op` x
 foldr1 :: (a -> a -> a) -> [a] -> a
 foldr1 _ []        = error "empty list"
 foldr1 _ [x]       = x
-foldr1 op (x : xs) = 
-  let x' = foldr1 op xs 
-  in (x `op` x') 
+foldr1 op (x : xs) =
+  let x' = foldr1 op xs
+  in (x `op` x')
 
 -- foldl1 (#) [x1, x2, x3, x4]  = (((x1 # x2) # x3) # x4)
 foldl1 :: (a -> a -> a) -> [a] -> a
 foldl1 _ []        = error "empty list"
-foldl1 _ [x]       = x 
-foldl1 op (x : xs) = 
-  let x' = foldl1 op xs 
+foldl1 _ [x]       = x
+foldl1 op (x : xs) =
+  let x' = foldl1 op xs
   in (x' `op` x)
 
 --
@@ -102,7 +102,7 @@ any :: (a -> Bool) -> [a] -> Bool
 any p = or . map p
 
 all :: (a -> Bool) -> [a] -> Bool
-all p = and . map p 
+all p = and . map p
 
 and :: [Bool] -> Bool
 and = foldl (&&) True
@@ -111,7 +111,7 @@ or :: [Bool] -> Bool
 or  = foldl (||) False
 
 minimum :: Ord a => [a] -> a
-minimum = foldl1 min 
+minimum = foldl1 min
 
 maximum :: Ord a => [a] -> a
 maximum = foldl1 max
@@ -120,7 +120,7 @@ length :: Integral i => [a] -> i
 length = foldr (\x y -> y + 1) 0
 
 filter :: (a -> Bool) -> [a] -> [a]
-filter = undefined
+filter p = foldr (\x -> if p x then (x:) else id) []
 
 map :: (a -> b) -> [a] -> [b]
 map f = foldr (cons . f) []
@@ -130,13 +130,17 @@ map f = foldr (cons . f) []
 -- fold (([a] -> a -> [a]) -> [a])) -> [a] -> [a]
 
 reverse :: [a] -> [a]
-reverse = foldl (flip snoc) [] 
+reverse = foldl (flip snoc) []
 
 takeWhile :: (a -> Bool) -> [a] -> [a]
-takeWhile = undefined
+takeWhile p = foldr (\x -> if p x then (x:) else const []) [] 
 
-dropWhile :: (a -> Bool) -> [a] -> [a]
-dropWhile = undefined
+-- sorry
+-- dropWhile :: (a -> Bool) -> [a] -> [a]
+-- dropWhile p = foldr (\x -> if p x then const [] else )) [] 
+
+revFilter :: (a -> Bool) -> [a] -> [a]
+revFilter p = foldr (\x -> if p x then id else (x:)) [] 
 
 -- sum of evens, safeMaximum of odds
 -- e.g.:
@@ -156,7 +160,7 @@ safeLast = undefined
 
 -- dec2int [1,9,9,2] = 1992
 dec2int :: Integral i => [i] -> i
-dec2int = undefined 
+dec2int = undefined
 
 
 

@@ -347,3 +347,23 @@ foldlIO_ :: (b -> a -> IO b) -> b -> [a] -> IO ()
 foldlIO_ op e = void . foldlIO op e  
 
 
+
+
+
+
+
+
+
+
+
+
+
+flyp :: (a -> b) -> (b -> a)
+flyp = undefined
+
+
+
+
+
+
+
