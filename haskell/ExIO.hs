@@ -13,6 +13,9 @@ import Prelude hiding
     , (>>=)
     )
 
+import Nat 
+
+
 -- read through the whole module first, to get an idea
 -- of what's required and to decide where to start
 -- 

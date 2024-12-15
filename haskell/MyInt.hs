@@ -56,11 +56,3 @@ x `times` y
   | haveShameSgn x y = P.undefined 
   | P.otherwise      = P.undefined 
               
-
-x = Int (S O) O
-y = Int (S P.$ S O) (S O) 
-z = Int O O
-a = Int 2 8 
-b = Int 9 3 
-
-

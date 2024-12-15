@@ -12,6 +12,9 @@ import qualified Prelude   as P
 import qualified Data.List as L
 import qualified Data.Char as C
 import Nat 
+import System.Random
+import ExIO
+
 
 -- to use a function from a qualified import
 -- you need to prefix its name with its alias
@@ -156,11 +159,38 @@ merge xs'@(x:xs) ys'@(y:ys)
   | x <= y = x:merge xs ys'
   | y < x  = y:merge xs' ys
 
+-- mSort :: Ord a => [a] -> [a] 
+-- mSort []  = [] 
+-- mSort [x] = [x]
+-- mSort xs = let (ls, rs) = (halfa xs)
+--            in merge (mSort ls) (mSort rs)
+
+id :: a -> a 
+id = \x -> x
+
+--replicateIO $ iomap (flip Prelude.rem $ 42) randomIO 
+
 mSort :: Ord a => [a] -> [a] 
-mSort []  = [] 
-mSort [x] = [x]
-mSort xs = let (ls, rs) = (halfa xs)
-           in merge (mSort ls) (mSort rs)
+mSort = mgMSort id 
+
+mgMerge :: Ord b => (a -> b) -> [a] -> [a] -> [a]
+mgMerge f xs [] = xs 
+mgMerge f [] ys = ys
+mgMerge f xs'@(x : xs) ys'@(y : ys)
+  | f x <= f y  = x : mgMerge f xs  ys'
+  | otherwise   = y : mgMerge f xs' ys
+
+mgMSort :: Ord b => (a -> b) -> [a] -> [a]
+mgMSort f xs@(_:_:_) = 
+  let (ls, rs) = halva xs 
+  in  mgMerge f (mgMSort f ls) (mgMSort f rs) 
+mgMSort f xs = xs
+
+halva :: [a] -> ([a], [a])
+halva (x1 : x2 : xs) = 
+  let (xs1, xs2) = halva xs
+  in  (x1 : xs1, x2 : xs2)
+halva xs = (xs, [])
 
 halfa :: [a] -> ([a], [a])
 halfa xs = splitAt (len xs </> 2) xs 

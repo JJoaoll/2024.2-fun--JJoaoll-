@@ -1,10 +1,23 @@
 module MyTypeClasses where
-import qualified Prelude as P 
+import Prelude  
 import qualified ExList as L
 
 class SemiGroup a where 
 --opSG has to be Associative 
   opSG :: a -> a -> a 
+
+instance Num String where 
+  (+)    = (++)
+  (*)    = (++) 
+  abs    = id 
+  signum = id 
+  fromInteger _ = ""
+  negate = id 
+
+
+len :: Num b => [a] -> b
+len [] = 0 
+len (_ : xs) = 1 + len xs
 
 compare :: SemiGroup a => a -> a -> a -> (a, a)
 compare x y z = (opSG x y, opSG x z)
@@ -41,6 +54,6 @@ class Functor f where
 -- fmap id = id
 -- fmap (f . g) = fmap f . fmap g 
  
-instance (Functor []) where 
-  fmap = L.map
+-- instance (Functor []) where 
+--   fmap = L.map
 
