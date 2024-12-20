@@ -12,7 +12,7 @@ import qualified Prelude   as P
 import qualified Data.List as L
 import qualified Data.Char as C
 import Nat 
-import System.Random
+--import System.Random
 import ExIO
 
 
