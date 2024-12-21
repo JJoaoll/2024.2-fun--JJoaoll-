@@ -153,7 +153,16 @@ semo = undefined
 -- e.g.:
 -- remdups [1,2,2,3,3,3,1,1] = [1,2,3,1]
 remdups :: Eq a => [a] -> [a]
-remdups = undefined
+remdups = foldr (\x xs -> 
+  case xs of 
+    []         -> [x]
+    (x' : xs') -> 
+      if x' == x
+        then x : xs'
+        else x : x' : xs') [] 
+                  
+                    
+                    
 
 safeLast :: [a] -> Maybe a
 safeLast = undefined
